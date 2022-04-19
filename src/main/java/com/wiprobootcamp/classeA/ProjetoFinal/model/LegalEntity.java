@@ -1,40 +1,34 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.model;
 
+import javax.persistence.Entity;
+
+@Entity
 public class LegalEntity extends Customer {
-    private Integer idLegalEntity;
-    private String cnpj;
-    private String companyName;
 
-    public LegalEntity() {
-    }
+	private String cnpj;
+	private String companyName;
 
-    public LegalEntity(Integer idLegalEntity, String cnpj, String companyName) {
-        this.idLegalEntity = idLegalEntity;
-        this.cnpj = cnpj;
-        this.companyName = companyName;
-    }
+	public LegalEntity() {
+	}
 
-    public Integer getIdLegalEntity() {
-        return idLegalEntity;
-    }
+	public LegalEntity(Integer idLegalEntity, String cnpj, String companyName) {
+		this.cnpj = cnpj;
+		this.companyName = companyName;
+	}
 
-    public void setIdLegalEntity(Integer idLegalEntity) {
-        this.idLegalEntity = idLegalEntity;
-    }
+	public String getCnpj() {
+		return cnpj;
+	}
 
-    public String getCnpj() {
-        return cnpj;
-    }
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
 
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
-    }
+	public String getCompanyName() {
+		return companyName;
+	}
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
 }
