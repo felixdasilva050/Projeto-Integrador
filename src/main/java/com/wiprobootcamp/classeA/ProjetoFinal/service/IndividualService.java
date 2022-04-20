@@ -23,12 +23,12 @@ public class IndividualService {
     }
 
     public Individual updateIndividualCustomer(Integer idCustomer, Individual obj) {
-        Individual upIndidual = findIndividualCustomerById(idCustomer);
-        upIndidual.setCustomerName(obj.getCustomerName());
-        upIndidual.setCpf(obj.getCpf());
-        upIndidual.setAddress(obj.getAddress());
-        upIndidual.setCostumerType(CustomerType.INDIVIDUAL);
-        return individualRepository.save(upIndidual);
+        Individual upIndividual = findIndividualCustomerById(idCustomer);
+        upIndividual.setCustomerName(obj.getCustomerName());
+        upIndividual.setCpf(obj.getCpf());
+        upIndividual.setAddress(obj.getAddress());
+        upIndividual.setCostumerType(CustomerType.INDIVIDUAL);
+        return individualRepository.save(upIndividual);
     }
 
     public Iterable<Individual> findAllIndividualCustomer() {
