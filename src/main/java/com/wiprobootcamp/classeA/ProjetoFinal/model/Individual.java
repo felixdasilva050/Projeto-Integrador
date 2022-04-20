@@ -1,6 +1,5 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.model;
 
-
 import javax.persistence.Entity;
 
 @Entity
