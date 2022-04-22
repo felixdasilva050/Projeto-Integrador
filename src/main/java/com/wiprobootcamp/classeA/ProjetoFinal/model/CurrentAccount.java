@@ -1,39 +1,37 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 import com.wiprobootcamp.classeA.ProjetoFinal.enums.AccountType;
 
 @Entity
 public class CurrentAccount extends Account {
-
-	// O atributo abaixo representa o Id da classe
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer idCurrentAccout;
+	
+	@OneToOne
+	@JoinColumn(name = "individual_id")
+	private Individual individual;
 
 	// Construtor padrão
 	public CurrentAccount() {
 	}
-
-	// construtor com os atributos
-	public CurrentAccount(Integer idCurrentAccout) {
+	
+	public CurrentAccount(Individual individual) {
 		super();
-		this.idCurrentAccout = idCurrentAccout;
+		this.individual = individual;
+	}
+
+	// Métodos Setter
+
+	public Individual getIndividual() {
+		return individual;
+	}
+
+	public void setIndividual(Individual individual) {
+		this.individual = individual;
 	}
 	
-	//Métodos Getters e Setters
-	public Integer getIdCurrentAccout() {
-		return idCurrentAccout;
-	}
-
-	public void setIdCurrentAccout(Integer idCurrentAccout) {
-		this.idCurrentAccout = idCurrentAccout;
-	}
-
 	public void setAccountNumber(String accountNumber) {
 		this.accountNumber = accountNumber;
 	}
@@ -50,16 +48,12 @@ public class CurrentAccount extends Account {
 		this.accountType = accountType;
 	}
 
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
-
-	//Métodos Equals e Hashcode
+	//Equals e Hascode
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((idCurrentAccout == null) ? 0 : idCurrentAccout.hashCode());
+		int result = super.hashCode();
+		result = prime * result + ((individual == null) ? 0 : individual.hashCode());
 		return result;
 	}
 
@@ -67,15 +61,15 @@ public class CurrentAccount extends Account {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		CurrentAccount other = (CurrentAccount) obj;
-		if (idCurrentAccout == null) {
-			if (other.idCurrentAccout != null)
+		if (individual == null) {
+			if (other.individual != null)
 				return false;
-		} else if (!idCurrentAccout.equals(other.idCurrentAccout))
+		} else if (!individual.equals(other.individual))
 			return false;
 		return true;
 	}

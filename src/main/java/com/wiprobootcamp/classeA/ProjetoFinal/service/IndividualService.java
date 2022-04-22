@@ -52,6 +52,7 @@ public class IndividualService {
         upIndidual.setAddress(individual.getAddress());
         upIndidual.setCostumerType(CustomerType.INDIVIDUAL);
         return individualRepository.save(upIndidual);
+
     }
 
     public Iterable<Individual> findAllIndividualCustomer() {
