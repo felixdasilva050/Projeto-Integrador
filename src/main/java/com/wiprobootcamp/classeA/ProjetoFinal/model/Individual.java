@@ -1,5 +1,7 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.model;
 
+import com.wiprobootcamp.classeA.ProjetoFinal.enums.CustomerType;
+
 import javax.persistence.Entity;
 
 @Entity
@@ -31,6 +33,5 @@ public class Individual extends Customer {
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
-
 
 }

@@ -30,7 +30,7 @@ public class IndividualService {
         newIndividual.setCustomerName(individual.getCustomerName());
         newIndividual.setAddress(individual.getAddress());
         newIndividual.setCpf(individual.getCpf());
-        newIndividual.setCostumerType(CustomerType.INDIVIDUAL);
+        newIndividual.setCostumerType(CustomerType.INDIVIDUAL2);
 
         individualRepository.save(newIndividual);
     }
@@ -50,9 +50,8 @@ public class IndividualService {
         upIndidual.setCustomerName(individual.getCustomerName());
         upIndidual.setCpf(individual.getCpf());
         upIndidual.setAddress(individual.getAddress());
-        upIndidual.setCostumerType(CustomerType.INDIVIDUAL);
+        upIndidual.setCostumerType(CustomerType.INDIVIDUAL2);
         return individualRepository.save(upIndidual);
-
     }
 
     public Iterable<Individual> findAllIndividualCustomer() {

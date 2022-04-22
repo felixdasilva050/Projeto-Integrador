@@ -11,6 +11,7 @@ public abstract class Customer {
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Integer idCustomer;
     private String address;
+    @Enumerated(EnumType.STRING)
     private CustomerType customerType;
 
     public Integer getIdCustomer() {
@@ -36,6 +37,4 @@ public abstract class Customer {
     public void setCostumerType(CustomerType customerType) {
         this.customerType = customerType;
     }
-
-
 }
