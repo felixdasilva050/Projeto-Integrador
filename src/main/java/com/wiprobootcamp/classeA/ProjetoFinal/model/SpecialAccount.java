@@ -1,6 +1,8 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.model;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 import com.wiprobootcamp.classeA.ProjetoFinal.enums.AccountType;
 
@@ -10,6 +12,10 @@ public class SpecialAccount extends Account {
 
 	// representa o valor do limite especial de uma conta especial
 	private Double limitAmount;
+
+	@OneToOne
+	@JoinColumn(name = "legalEntity_id")
+	private LegalEntity legalEntity;
 
 	// Construtor da Superclasse
 	public SpecialAccount() {
@@ -47,16 +53,7 @@ public class SpecialAccount extends Account {
 		this.accountType = accountType;
 	}
 
-	// Método para relaizar saques especial quando o valor do saldo for menor..
-	// ..que o valor a ser sacado
-	public void specialWithdraw(Double money) {
-		if (this.balance <= money) {
-			balance = balance - money;
-			limitAmount = balance + limitAmount;
-			balance = 0.0;
-		}
-	}
-	
+
 	//Métodos Equals e Hascode
 
 	@Override
