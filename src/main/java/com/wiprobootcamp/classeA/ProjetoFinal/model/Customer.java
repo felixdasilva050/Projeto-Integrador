@@ -10,7 +10,10 @@ public abstract class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Integer idCustomer;
+
     private String address;
+
+    @OneToOne(mappedBy = "")
     @Enumerated(EnumType.STRING)
     private CustomerType customerType;
 
