@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/individual")
 @CrossOrigin("*")
@@ -17,26 +19,33 @@ public class IndividualController {
 
     @GetMapping("/{idCustomer}")
     public ResponseEntity<Individual> getIndividualById(@PathVariable Integer idCustomer) {
-        Individual obj = this.service.findIndividualCustomerById(idCustomer);
-        return ResponseEntity.ok().body(obj);
+        Individual individual = this.service.findIndividualCustomerById(idCustomer);
+        return ResponseEntity.ok().body(individual);
     }
 
-    @GetMapping
-    public ResponseEntity<Iterable<Individual>> getAllIndividual() {
-        Iterable<Individual> allIndividualDb = this.service.findAllIndividualCustomer();
-        return ResponseEntity.ok().body(allIndividualDb);
+    @GetMapping("/findall")
+    public Iterable<Individual> getAllIndividual() {
+        return this.service.findAllIndividualCustomer();
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Individual> createIndividual(@RequestBody Individual individual) {
-        Individual newObj = this.service.createIndividualCustomer(individual);
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.service.createIndividualCustomer(individual));
+    public ResponseEntity<String> createIndividualCustomer(@RequestBody Individual individual) {
+        try {
+            service.createIndividualCustomer(individual);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Cliente " + individual.getCustomerName() + " criado com sucesso!");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        }
     }
 
-    @PutMapping("/update/{idCustomer}")
-    public ResponseEntity<Individual> updateIndividual(@PathVariable Integer idCustomer, @RequestBody Individual obj) {
-        Individual upIndiv = this.service.updateIndividualCustomer(idCustomer, obj);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(upIndiv);
+    @PutMapping("/update")
+    public ResponseEntity<String> updateIndividual(Individual individual) {
+    try {
+        service.updateIndividualCustomer(individual);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(individual.getCustomerName() + " Updated!");
+    } catch (Exception ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
     }
 
     @DeleteMapping("/delete/{idCustomer}")
