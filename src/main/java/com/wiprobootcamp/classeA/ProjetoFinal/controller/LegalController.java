@@ -21,32 +21,41 @@ import com.wiprobootcamp.classeA.ProjetoFinal.service.LegalService;
 @CrossOrigin("*")
 public class LegalController {
 
-    @Autowired
-    private LegalService service;
+	@Autowired
+	private LegalService service;
 
-    @GetMapping("/{idCustomer}")
-    public ResponseEntity<LegalEntity> getLegalById(@PathVariable Integer idCustomer) {
-        LegalEntity obj = this.service.findLegalCustomerById(idCustomer);
-        return ResponseEntity.ok().body(obj);
-    }
+	@GetMapping("/{idCustomer}")
+	public ResponseEntity<LegalEntity> getLegalById(@PathVariable Integer idCustomer) {
+		LegalEntity obj = this.service.findLegalCustomerById(idCustomer);
+		return ResponseEntity.ok().body(obj);
+	}
 
-    @GetMapping
-    public ResponseEntity<Iterable<LegalEntity>> getAllLegalEntity() {
-        Iterable<LegalEntity> allLegalEntityDb = this.service.findAllLegalCustomer();
-        return ResponseEntity.ok().body(allLegalEntityDb);
-    }
+	@GetMapping("/findall")
+	public Iterable<LegalEntity> getAllLegalEntity() {
+		return this.service.findAllLegalCustomer();
+	}
 
-    @PostMapping("/create")
-    public ResponseEntity<LegalEntity> createLegalEntity(@RequestBody LegalEntity legal) {
-        LegalEntity newObj = this.service.createLegalCustomer(legal);
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.service.createLegalCustomer(legal));
-    }
+	@PostMapping("/create")
+	public ResponseEntity<String> createLegalEntityCustomer(@RequestBody LegalEntity legal) {
 
-    @PutMapping("/update/{idCustomer}")
-    public ResponseEntity<LegalEntity> updateLegalEntity(@PathVariable Integer idCustomer, @RequestBody LegalEntity obj) {
-        LegalEntity uplegal = this.service.updateLegalCustomer(idCustomer, obj);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(uplegal);
-    }
+		try {
+			service.createLegalEntityCustomer(legal);
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body("Empresa " + legal.getCompanyName() + " criado com sucesso!");
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+		}
+	}
+
+	@PutMapping("/update")
+	public ResponseEntity<String> updateLegalEntity(LegalEntity legal) {
+		try {
+			service.updateLegalCustomer(legal);
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(legal.getCompanyName() + " Updated!");
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+		}
+	}
 
     @DeleteMapping("/delete/{idCustomer}")
     public ResponseEntity<Void> deleteLegalEntity(@PathVariable Integer idCustomer) {
