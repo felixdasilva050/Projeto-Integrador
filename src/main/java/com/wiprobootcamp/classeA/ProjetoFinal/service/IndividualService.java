@@ -7,14 +7,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class IndividualService {
+
+    Logger logger = Logger.getLogger(IndividualService.class.getName());
+
     @Autowired
     private IndividualRepository individualRepository;
 
-    public Individual createIndividualCustomer(Individual obj) {
-        return individualRepository.save(obj);
+    public void createIndividualCustomer(Individual individual) throws Exception {
+        //Verifica se já existe um CPF no banco de dados.
+        Optional<Individual> findCpf = individualRepository.findByCpf(individual.getCpf());
+
+        //Retornando um cliente já cadastrado jogamos uma exception.
+        if(findCpf.isPresent()){
+            logger.info("Cliente já existe no banco de dados.");
+            throw new Exception("Cliente já cadastrado");
+        }
+        Individual newIndividual = new Individual();
+        newIndividual.setCustomerName(individual.getCustomerName());
+        newIndividual.setAddress(individual.getAddress());
+        newIndividual.setCpf(individual.getCpf());
+        newIndividual.setCostumerType(CustomerType.INDIVIDUAL);
+
+        individualRepository.save(newIndividual);
     }
 
     public Individual findIndividualCustomerById(Integer idCustomer) {
@@ -22,13 +40,19 @@ public class IndividualService {
         return findIndCustRepo.orElse(null);
     }
 
-    public Individual updateIndividualCustomer(Integer idCustomer, Individual obj) {
-        Individual upIndividual = findIndividualCustomerById(idCustomer);
-        upIndividual.setCustomerName(obj.getCustomerName());
-        upIndividual.setCpf(obj.getCpf());
-        upIndividual.setAddress(obj.getAddress());
-        upIndividual.setCostumerType(CustomerType.INDIVIDUAL);
-        return individualRepository.save(upIndividual);
+    public Individual updateIndividualCustomer(Individual individual) throws Exception {
+        Optional<Individual> findCustomer = individualRepository.findByCpf(individual.getCpf());
+        if(findCustomer.isEmpty()) {
+            logger.info("Cliente não encontrado no banco de dados");
+            throw new Exception("Cliente não existe!");
+        }
+        Individual upIndidual = findIndividualCustomerById(findCustomer.get().getIdCustomer());
+        upIndidual.setCustomerName(individual.getCustomerName());
+        upIndidual.setCpf(individual.getCpf());
+        upIndidual.setAddress(individual.getAddress());
+        upIndidual.setCostumerType(CustomerType.INDIVIDUAL);
+        return individualRepository.save(upIndidual);
+
     }
 
     public Iterable<Individual> findAllIndividualCustomer() {
