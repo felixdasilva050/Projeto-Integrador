@@ -59,7 +59,7 @@ public class CurrentAccountController {
     }
 
     @PutMapping("/deposit")
-    public ResponseEntity<String> depositMoney(TransactionsRequest transactionsRequest) {
+    public ResponseEntity<String> depositMoney(@RequestBody TransactionsRequest transactionsRequest) {
         try {
             currentAccountService.depositMoney(transactionsRequest);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Depósito de " + transactionsRequest.getDebitValue() + " Realizado com sucesso!");

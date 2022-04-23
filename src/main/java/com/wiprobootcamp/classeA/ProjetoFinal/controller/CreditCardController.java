@@ -44,4 +44,9 @@ public class CreditCardController {
         this.service.deleteCreditCard(idCreditCard);
         return ResponseEntity.noContent().build();
     }
+    @PutMapping("/update/admin/{idCreditCard}")
+    public ResponseEntity<CreditCard> updateLimitCreditCard(@PathVariable Integer idCreditCard, @RequestBody CreditCard creditCard){
+        CreditCard upCard = this.service.updateLimit(idCreditCard,creditCard);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(upCard);
+    }
 }

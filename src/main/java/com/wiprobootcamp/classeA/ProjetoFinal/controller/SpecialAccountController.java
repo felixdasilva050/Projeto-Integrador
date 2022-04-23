@@ -58,7 +58,7 @@ public class SpecialAccountController {
     }
 
     @PutMapping("/deposit")
-    public ResponseEntity<String> depositMoney(TransactionsRequest transactionsRequest) {
+    public ResponseEntity<String> depositMoney(@RequestBody TransactionsRequest transactionsRequest) {
         try {
             specialAccountService.depositMoney(transactionsRequest);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Depósito de " + transactionsRequest.getDebitValue() + " Realizado com sucesso!");
