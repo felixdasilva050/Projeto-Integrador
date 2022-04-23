@@ -48,7 +48,7 @@ public class LegalController {
 	}
 
 	@PutMapping("/update")
-	public ResponseEntity<String> updateLegalEntity(LegalEntity legal) {
+	public ResponseEntity<String> updateLegalEntity(@RequestBody LegalEntity legal) {
 		try {
 			service.updateLegalCustomer(legal);
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(legal.getCompanyName() + " Updated!");
