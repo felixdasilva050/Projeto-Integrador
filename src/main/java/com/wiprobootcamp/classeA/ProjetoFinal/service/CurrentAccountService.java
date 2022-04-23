@@ -67,57 +67,14 @@ public class CurrentAccountService {
 			return currentAccountRepository.save(newCurrentAccount);
 	}
 	
-	//Método que deleta uma conta corrente dado um ID
-	public void delete(Integer id) {
-		findById(id);
-		currentAccountRepository.deleteById(id);
-	}
-
-	public void withdrawCash(TransactionsRequest transactionsRequest) throws Exception {
-
-		verifyWithdraw(transactionsRequest);
-
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		String todayFormated = sdf.format(new Date());
-
-		transactionsRequest.setTransactionDate(todayFormated);
-
-	}
-
-	public void depositMoney(TransactionsRequest transactionsRequest) throws Exception {
-		Optional<CurrentAccount> findAccountInDb = currentAccountRepository.findByAccountNumber(transactionsRequest.getAccountNumber());
-		if(findAccountInDb.isEmpty()) {
-			logger.info("Conta não existe no Banco de Dados");
-			throw new Exception("Conta não localizada!");
+	//Método que deleta uma conta corrente informando o número da conta
+	public void delete(Integer id) throws Exception {
+		Optional<CurrentAccount> findCurrentAccount = currentAccountRepository.findById(id);
+		if(findCurrentAccount.isEmpty()) {
+			logger.info("Conta não existe no banco de dados!");
+			throw new Exception("Conta inexistente!");
 		}
-		Double defineBalance = findAccountInDb.get().getBalance() + transactionsRequest.getDebitValue();
-		findAccountInDb.get().setBalance(defineBalance);
-
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
-		String todayFormated = sdf.format(new Date());
-
-		transactionsRequest.setTransactionDate(todayFormated);
-
-		currentAccountRepository.save(findAccountInDb.get());
-	}
-
-	private void verifyWithdraw(TransactionsRequest transactionsRequest) throws Exception {
-		Optional<CurrentAccount> findAccountInDb = currentAccountRepository.findByAccountNumber(transactionsRequest.getAccountNumber());
-
-		//verifica se a conta existe no DB, caso não retorna exception
-		if(findAccountInDb.isEmpty()) {
-			logger.info("Conta não existe no Banco de Dados");
-			throw new Exception("Conta não localizada!");
-
-			//verifica se possui saldo em conta para sacar, caso possuia apenas realiza o saque
-		} else if (transactionsRequest.getDebitValue() <= findAccountInDb.get().getBalance()) {
-			findAccountInDb.get().setBalance(findAccountInDb.get().getBalance() - transactionsRequest.getDebitValue());
-			currentAccountRepository.save(findAccountInDb.get());
-
-			//Se não a aplicação apenas devolde a mensagem de saldo insuficiente
-		} else {
-			logger.info("Saldo insuficiente!");
-		}
+		currentAccountRepository.deleteById(findCurrentAccount.get().getIdAccount());
 	}
 
 }

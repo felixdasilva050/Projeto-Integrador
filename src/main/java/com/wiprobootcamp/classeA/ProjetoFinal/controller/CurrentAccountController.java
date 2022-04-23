@@ -47,24 +47,14 @@ public class CurrentAccountController {
         }
     }
 
-    @PutMapping("/currentWithdraw")
-    public ResponseEntity<String> currentWithdraw(@RequestBody TransactionsRequest transactionsRequest) throws Exception {
-        try {
-            currentAccountService.withdrawCash(transactionsRequest);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saque de " + transactionsRequest.getDebitValue() + " Realizado com sucesso!");
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-        }
 
-    }
-
-    @PutMapping("/deposit")
-    public ResponseEntity<String> depositMoney(@RequestBody TransactionsRequest transactionsRequest) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteCurrentAccount(@PathVariable Integer id){
         try {
-            currentAccountService.depositMoney(transactionsRequest);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Depósito de " + transactionsRequest.getDebitValue() + " Realizado com sucesso!");
+            currentAccountService.delete(id);
+            return ResponseEntity.status(HttpStatus.GONE).body("Conta deletada com sucesso!");
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conta corrente não encontrada no banco de dados!");
         }
     }
 }

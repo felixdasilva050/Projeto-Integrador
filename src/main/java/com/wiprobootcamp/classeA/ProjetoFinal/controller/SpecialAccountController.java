@@ -1,7 +1,6 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.controller;
 
 import com.wiprobootcamp.classeA.ProjetoFinal.model.SpecialAccount;
-import com.wiprobootcamp.classeA.ProjetoFinal.model.TransactionsRequest;
 import com.wiprobootcamp.classeA.ProjetoFinal.service.SpecialAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,24 +45,14 @@ public class SpecialAccountController {
         }
     }
 
-    @PutMapping("/specialWithdraw")
-    public ResponseEntity<String> specialWithdraw(@RequestBody TransactionsRequest transactionsRequest) throws Exception {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteSpecialAccount(@PathVariable Integer id) {
         try {
-            specialAccountService.specialWithdraw(transactionsRequest);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saque de " + transactionsRequest.getDebitValue() + " Realizado com sucesso!");
+            specialAccountService.delete(id);
+         return  ResponseEntity.status(HttpStatus.ACCEPTED).body("Conta especial deletada com sucesso!");
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-        }
-
-    }
-
-    @PutMapping("/deposit")
-    public ResponseEntity<String> depositMoney(@RequestBody TransactionsRequest transactionsRequest) {
-        try {
-            specialAccountService.depositMoney(transactionsRequest);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Depósito de " + transactionsRequest.getDebitValue() + " Realizado com sucesso!");
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         }
     }
+
 }
