@@ -39,7 +39,7 @@ public class IndividualController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> updateIndividual(Individual individual) {
+    public ResponseEntity<String> updateIndividual(@RequestBody Individual individual) {
     try {
         service.updateIndividualCustomer(individual);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(individual.getCustomerName() + " Updated!");
