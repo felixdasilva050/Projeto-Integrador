@@ -58,4 +58,9 @@ public class CreditCardService {
         String numCard = String.join("-", numeroCartao);
         return numCard;
     }
+    public CreditCard updateLimit(Integer idCreditCard, CreditCard creditCard){
+        CreditCard findIdCreditCard = findCreditCardById(idCreditCard);
+        findIdCreditCard.setCardLimit(creditCard.getCardLimit());
+        return creditCardRepository.save(findIdCreditCard);
+    }
 }
