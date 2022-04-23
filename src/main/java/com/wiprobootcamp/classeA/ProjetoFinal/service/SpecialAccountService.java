@@ -78,7 +78,7 @@ public class SpecialAccountService {
 
 		verifyWithdraw(transactionsRequest);
 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		String todayFormated = sdf.format(new Date());
 
 		transactionsRequest.setTransactionDate(todayFormated);
