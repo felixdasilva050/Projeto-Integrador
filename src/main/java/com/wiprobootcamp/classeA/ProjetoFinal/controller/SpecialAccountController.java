@@ -37,7 +37,7 @@ public class SpecialAccountController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> updateSpecialAccount(SpecialAccount specialAccount) {
+    public ResponseEntity<String> updateSpecialAccount(@RequestBody SpecialAccount specialAccount) {
         try {
             specialAccountService.update(specialAccount);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Conta especial " + specialAccount.getAccountNumber() + " atualizada com sucesso!");
