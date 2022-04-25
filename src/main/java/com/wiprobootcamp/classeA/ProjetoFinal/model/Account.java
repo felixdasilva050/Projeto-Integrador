@@ -36,7 +36,7 @@ public abstract class Account {
 
 	//Construtor com os atributos
 	public Account(Integer idAccount, String accountNumber, Double balance, CreditCard creditCard,
-			AccountType accountType) {
+				   AccountType accountType) {
 		super();
 		this.idAccount = idAccount;
 		this.accountNumber = accountNumber;

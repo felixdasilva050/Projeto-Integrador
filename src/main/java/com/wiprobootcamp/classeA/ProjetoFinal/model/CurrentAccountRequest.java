@@ -1,28 +1,34 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.model;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-
 import com.wiprobootcamp.classeA.ProjetoFinal.enums.AccountType;
 
+import javax.persistence.Entity;
+
 @Entity
-public class CurrentAccount extends Account {
+public class CurrentAccountRequest extends Account {
 
-	@OneToOne
-	private Customer customer;
+	private String documentNumber;
 
-	public CurrentAccount() {
-		this.customer = customer;
+
+	public CurrentAccountRequest(String documentNumber) {
+		this.documentNumber = documentNumber;
+
 	}
+
+	public CurrentAccountRequest() {
+
+	}
+
+
 	// Métodos Setter
 
 
-	public Customer getCustomer() {
-		return customer;
+	public String getDocumentNumber() {
+		return documentNumber;
 	}
 
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
+	public void setDocumentNumber(String documentNumber) {
+		this.documentNumber = documentNumber;
 	}
 
 	public void setAccountNumber(String accountNumber) {
