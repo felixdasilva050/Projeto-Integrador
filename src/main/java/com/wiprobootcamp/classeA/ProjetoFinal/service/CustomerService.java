@@ -17,34 +17,36 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Customer createCustomer(Customer customer) {
-        //Verifica se já existe um CPF no banco de dados.
+    public Customer createCustomer(Customer customer) throws BusinessException {
         Optional<Customer> findCustomer = customerRepository.findByDocumentNumber(customer.getDocumentNumber());
-
-        //Retornando um cliente já cadastrado jogamos uma exception.
-        if(findCustomer.isPresent()){
-            logger.info("Cliente já existe no banco de dados.");
-            throw new BusinessException("Cliente já cadastrado");
+        if (findCustomer.isPresent()) {
+            logger.info("Cliente já cadastrado no banco de dados");
+            throw new BusinessException("Cliente já cadastrado!");
         }
         Customer newCustomer = new Customer();
         newCustomer.setSocialName(customer.getSocialName());
         newCustomer.setAddress(customer.getAddress());
         newCustomer.setDocumentNumber(customer.getDocumentNumber());
         newCustomer.setCustomerType(customer.getCustomerType());
-
-       return customerRepository.save(newCustomer);
+        return customerRepository.save(newCustomer);
     }
 
-//    public Individual findIndividualCustomerById(Integer idCustomer) {
-//        Optional<Individual> findIndCustRepo = individualRepository.findById(idCustomer);
-//        return findIndCustRepo.orElse(null);
-//    }
+    public Customer findCustomerById(Integer idCustomer) throws BusinessException {
+        Optional<Customer> findCustomerId = customerRepository.findById(idCustomer);
+        if(findCustomerId.isEmpty()) {
+            throw new BusinessException("Id de cliente não localizada");
+        }
+        return findCustomerId.get();
+    }
 
     public Customer updateCustomer(Customer customer) throws Exception {
+        //Verifica se já existe um CPF no banco de dados.
         Optional<Customer> findCustomer = customerRepository.findByDocumentNumber(customer.getDocumentNumber());
-        if(findCustomer.isEmpty()) {
-            logger.info("Cliente não encontrado no banco de dados");
-            throw new Exception("Cliente não existe!");
+
+        //Retornando um cliente já cadastrado jogamos uma exception.
+        if (findCustomer.isEmpty()) {
+            logger.info("Cliente não existe no banco de dados.");
+            throw new BusinessException("Cliente não cadastrado");
         }
         Customer upCustomer = new Customer();
         upCustomer.setIdCustomer(customer.getIdCustomer());
@@ -53,16 +55,15 @@ public class CustomerService {
         upCustomer.setAddress(customer.getAddress());
         upCustomer.setCustomerType(customer.getCustomerType());
         return customerRepository.save(upCustomer);
-
     }
 
     public Iterable<Customer> findAllCustomer() {
         return customerRepository.findAll();
     }
 
-//    public void deleteIndividualCustomer(Integer idCustomer) {
-//        findIndividualCustomerById(idCustomer);
-//        individualRepository.deleteById(idCustomer);
-//    }
+    public void deleteCustomerBy(Integer idCustomer) throws BusinessException {
+        findCustomerById(idCustomer);
+        customerRepository.deleteById(idCustomer);
+    }
 
 }

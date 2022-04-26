@@ -1,6 +1,8 @@
-package com.wiprobootcamp.classeA.ProjetoFinal.model;
+package com.wiprobootcamp.classeA.ProjetoFinal.request;
 
 import com.wiprobootcamp.classeA.ProjetoFinal.enums.AccountType;
+import com.wiprobootcamp.classeA.ProjetoFinal.model.Account;
+import com.wiprobootcamp.classeA.ProjetoFinal.model.CreditCard;
 
 import javax.persistence.Entity;
 

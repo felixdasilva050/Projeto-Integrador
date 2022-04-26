@@ -3,7 +3,7 @@ package com.wiprobootcamp.classeA.ProjetoFinal.service;
 import com.wiprobootcamp.classeA.ProjetoFinal.enums.AccountType;
 import com.wiprobootcamp.classeA.ProjetoFinal.model.Customer;
 import com.wiprobootcamp.classeA.ProjetoFinal.model.SpecialAccount;
-import com.wiprobootcamp.classeA.ProjetoFinal.model.SpecialAccountRequest;
+import com.wiprobootcamp.classeA.ProjetoFinal.request.SpecialAccountRequest;
 import com.wiprobootcamp.classeA.ProjetoFinal.repository.CustomerRepository;
 import com.wiprobootcamp.classeA.ProjetoFinal.repository.SpecialAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;

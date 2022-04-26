@@ -1,9 +1,7 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.controller;
 
-import com.wiprobootcamp.classeA.ProjetoFinal.model.CurrentAccount;
-import com.wiprobootcamp.classeA.ProjetoFinal.model.CurrentAccountRequest;
 import com.wiprobootcamp.classeA.ProjetoFinal.model.SpecialAccount;
-import com.wiprobootcamp.classeA.ProjetoFinal.model.SpecialAccountRequest;
+import com.wiprobootcamp.classeA.ProjetoFinal.request.SpecialAccountRequest;
 import com.wiprobootcamp.classeA.ProjetoFinal.service.SpecialAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

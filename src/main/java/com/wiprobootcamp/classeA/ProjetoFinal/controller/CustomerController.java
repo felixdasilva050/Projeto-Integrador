@@ -1,5 +1,6 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.controller;
 
+import com.wiprobootcamp.classeA.ProjetoFinal.CustomException.BusinessException;
 import com.wiprobootcamp.classeA.ProjetoFinal.model.Customer;
 import com.wiprobootcamp.classeA.ProjetoFinal.service.CustomerService;
 import org.springframework.http.HttpStatus;
@@ -20,11 +21,11 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-//    @GetMapping("/{idCustomer}")
-//    public ResponseEntity<Individual> getIndividualById(@PathVariable Integer idCustomer) {
-//        Individual individual = this.service.findIndividualCustomerById(idCustomer);
-//        return ResponseEntity.ok().body(individual);
-//    }
+    @GetMapping("/findById/{idCustomer}")
+    public ResponseEntity<Customer> getIndividualById(@PathVariable Integer idCustomer) throws BusinessException {
+        Customer individual = this.customerService.findCustomerById(idCustomer);
+        return ResponseEntity.ok().body(individual);
+    }
 
     @GetMapping("/findall")
     public Iterable<Customer> getAllCustomers() {
@@ -32,10 +33,9 @@ public class CustomerController {
         }
 
     @PostMapping("/create")
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
-            Customer newCustomer = customerService.createCustomer(customer);
-            return ResponseEntity.status(HttpStatus.CREATED).body(newCustomer);
-        }
+    public Customer createCustomer(@RequestBody Customer customer) throws BusinessException {
+    return customerService.createCustomer(customer);
+    }
 
     @PutMapping("/update")
     public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer) throws Exception {
@@ -43,9 +43,13 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(customer);
     }
 
-//    @DeleteMapping("/delete/{idCustomer}")
-//    public ResponseEntity<Void> deleteIndividual(@PathVariable Integer idCustomer) {
-//        this.service.deleteIndividualCustomer(idCustomer);
-//        return ResponseEntity.noContent().build();
-//    }
+    @DeleteMapping("/delete/{idCustomer}")
+    public ResponseEntity<String> deleteCurrentAccount(@PathVariable Integer idCustomer){
+        try {
+            customerService.deleteCustomerBy(idCustomer);
+            return ResponseEntity.status(HttpStatus.GONE).body("Conta deletada com sucesso!");
+        } catch (BusinessException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conta corrente não encontrada no banco de dados!");
+        }
+    }
 }
