@@ -8,22 +8,10 @@ import com.wiprobootcamp.classeA.ProjetoFinal.enums.AccountType;
 @Entity
 public class CurrentAccount extends Account {
 
-	@OneToOne
-	private Customer customer;
 
-	public CurrentAccount() {
-		this.customer = customer;
-	}
+
 	// Métodos Setter
 
-
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
 
 	public void setAccountNumber(String accountNumber) {
 		this.accountNumber = accountNumber;

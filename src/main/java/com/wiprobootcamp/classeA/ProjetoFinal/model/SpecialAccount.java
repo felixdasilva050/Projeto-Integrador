@@ -11,8 +11,6 @@ public class SpecialAccount extends Account {
 
 	private Double limitAmount;
 
-	@OneToOne
-	private Customer customer;
 
 
 	// Construtor da Superclasse
@@ -28,14 +26,6 @@ public class SpecialAccount extends Account {
 
 	// Métodos getters e setters
 
-
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
 
 	public Double getLimitAmount() {
 		return limitAmount;

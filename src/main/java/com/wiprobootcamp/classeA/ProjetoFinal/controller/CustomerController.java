@@ -5,11 +5,14 @@ import com.wiprobootcamp.classeA.ProjetoFinal.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/customer")
 @CrossOrigin("*")
+@ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "Actor Not Found")
 public class CustomerController {
+
 
     private final CustomerService customerService;
 
@@ -24,18 +27,26 @@ public class CustomerController {
 //    }
 
     @GetMapping("/findall")
-    public Iterable<Customer> getAllIndividual() {
-        return this.customerService.findAllCustomer();
+    public Iterable<Customer> getAllCustomers() {
+        try {
+            return this.customerService.findAllCustomer();
+        } catch (Exception ex) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ex.toString());
+        }
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Customer> createIndividualCustomer(@RequestBody Customer customer) throws Exception {
-        Customer newCustomer = customerService.createCustomer(customer);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newCustomer);
+    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
+        try {
+            Customer newCustomer = customerService.createCustomer(customer);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newCustomer);
+        } catch (Exception ex) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ex.toString());
+        }
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Customer> updateIndividual(@RequestBody Customer customer) throws Exception {
+    public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer) throws Exception {
         customerService.updateCustomer(customer);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(customer);
     }
