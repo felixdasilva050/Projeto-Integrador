@@ -1,5 +1,6 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.service;
 
+import com.wiprobootcamp.classeA.ProjetoFinal.CustomException.BusinessException;
 import com.wiprobootcamp.classeA.ProjetoFinal.model.Customer;
 import com.wiprobootcamp.classeA.ProjetoFinal.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +17,14 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Customer createCustomer(Customer customer) throws Exception {
+    public Customer createCustomer(Customer customer) {
         //Verifica se já existe um CPF no banco de dados.
         Optional<Customer> findCustomer = customerRepository.findByDocumentNumber(customer.getDocumentNumber());
 
         //Retornando um cliente já cadastrado jogamos uma exception.
         if(findCustomer.isPresent()){
             logger.info("Cliente já existe no banco de dados.");
-            throw new Exception("Cliente já cadastrado");
+            throw new BusinessException("Cliente já cadastrado");
         }
         Customer newCustomer = new Customer();
         newCustomer.setSocialName(customer.getSocialName());

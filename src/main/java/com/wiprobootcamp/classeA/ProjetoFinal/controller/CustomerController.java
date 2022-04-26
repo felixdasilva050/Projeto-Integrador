@@ -10,7 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/customer")
 @CrossOrigin("*")
-@ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "Actor Not Found")
+
 public class CustomerController {
 
 
@@ -28,22 +28,14 @@ public class CustomerController {
 
     @GetMapping("/findall")
     public Iterable<Customer> getAllCustomers() {
-        try {
             return this.customerService.findAllCustomer();
-        } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, ex.toString());
         }
-    }
 
     @PostMapping("/create")
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
-        try {
             Customer newCustomer = customerService.createCustomer(customer);
             return ResponseEntity.status(HttpStatus.CREATED).body(newCustomer);
-        } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, ex.toString());
         }
-    }
 
     @PutMapping("/update")
     public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer) throws Exception {
