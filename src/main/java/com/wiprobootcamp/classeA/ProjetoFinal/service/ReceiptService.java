@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -31,10 +32,10 @@ public class ReceiptService {
         receiptRepository.save(newReceipt);
 
         String title = "Comprovante de transação ";
-        String idTransaction = "Id da transação número: " + newReceipt.getIdReceipt();
-        String valueTransaction = "No valor de: " + newReceipt.getValue();
-        String dateTransaction = "Transação realizada na data de :" + newReceipt.getTransactionDate();
-        String dataReceipt = title + " " + idTransaction + " " + valueTransaction + " " + dateTransaction;
+        String idTransaction = " Id da transação número: " + newReceipt.getIdReceipt();
+        String valueTransaction = " No valor de: " + newReceipt.getValue();
+        String dateTransaction = " Transação realizada na data de: " + newReceipt.getTransactionDate();
+        String dataReceipt = title + idTransaction + valueTransaction + dateTransaction;
 
         return dataReceipt;
 
@@ -42,6 +43,10 @@ public class ReceiptService {
 
     public List<Receipt> allReceipts() {
         return receiptRepository.findAll();
+    }
+
+    public Iterable<Receipt> receiptsOfAccount(String accountNumber){
+        return receiptRepository.findAllByAccountNumber(accountNumber);
     }
 
 }

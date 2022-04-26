@@ -15,11 +15,9 @@ import org.springframework.web.bind.annotation.*;
 public class CurrentAccountController {
 
     private final CurrentAccountService currentAccountService;
-    private final ReceiptService receiptService;
 
     public CurrentAccountController(CurrentAccountService currentAccountService, ReceiptService receiptService) {
         this.currentAccountService = currentAccountService;
-        this.receiptService = receiptService;
     }
 
     @GetMapping("/findById/{idAccount}")
@@ -38,6 +36,7 @@ public class CurrentAccountController {
     public CurrentAccount createCurrentAccount(@RequestBody CurrentAccountRequest currentAccountRequest) throws Exception {
         return  currentAccountService.createCurrentAccount(currentAccountRequest);
     }
+
     @PutMapping("/update")
     public ResponseEntity<CurrentAccount> updateIndividual(@RequestBody CurrentAccount currentAccount) throws Exception {
         currentAccountService.updateCurrentAccount(currentAccount);
@@ -48,7 +47,7 @@ public class CurrentAccountController {
     public ResponseEntity<String> deleteCurrentAccount(@PathVariable Integer id){
         try {
             currentAccountService.delete(id);
-            return ResponseEntity.status(HttpStatus.GONE).body("Conta deletada com sucesso!");
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Conta deletada com sucesso!");
         } catch (BusinessException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Conta corrente não encontrada no banco de dados!");
         }
@@ -57,11 +56,10 @@ public class CurrentAccountController {
     @PutMapping("/currentWithdraw")
     public ResponseEntity<String> currentWithdraw(@RequestBody TransactionsRequest transactionsRequest) {
         try {
-           return ResponseEntity.status(HttpStatus.GONE).body(currentAccountService.withdrawCash(transactionsRequest));
+           return ResponseEntity.status(HttpStatus.ACCEPTED).body(currentAccountService.withdrawCash(transactionsRequest));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         }
-
     }
 
     @PutMapping("/deposit")
