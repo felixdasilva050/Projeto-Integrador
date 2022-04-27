@@ -1,28 +1,22 @@
-package com.wiprobootcamp.classeA.ProjetoFinal.model;
+package com.wiprobootcamp.classeA.ProjetoFinal.request;
 
-import javax.persistence.*;
+import com.wiprobootcamp.classeA.ProjetoFinal.model.Account;
 
-@Entity
-public class CreditCard {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CreditCardRequest {
     private Integer idCreditCard;
     private String cardNumber;
     private Double cardLimit;
     private Integer password;
-
-    @OneToOne
-    private Account account;
-
-    public CreditCard() {
+    private String accountNumber;
+    public CreditCardRequest() {
     }
 
-    public Account getAccount() {
-        return account;
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public Integer getIdCreditCard() {
@@ -57,3 +51,4 @@ public class CreditCard {
         this.password = password;
     }
 }
+

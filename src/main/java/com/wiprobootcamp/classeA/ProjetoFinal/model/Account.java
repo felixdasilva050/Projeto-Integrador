@@ -23,9 +23,6 @@ public abstract class Account {
 	protected String accountNumber;
 	protected Double balance;
 	
-	@OneToOne
-	@JoinColumn(name = "id_creditcard")
-	protected CreditCard creditCard;
 
 	@OneToOne
 	private Customer customer;
@@ -44,7 +41,6 @@ public abstract class Account {
 		this.idAccount = idAccount;
 		this.accountNumber = accountNumber;
 		this.balance = balance;
-		this.creditCard = creditCard;
 		this.accountType = accountType;
 	}
 
@@ -75,9 +71,6 @@ public abstract class Account {
 		return balance;
 	}
 
-	public CreditCard getCreditCard() {
-		return creditCard;
-	}
 
 	public AccountType getAccountType() {
 		return accountType;
@@ -92,7 +85,6 @@ public abstract class Account {
 		result = prime * result + ((accountNumber == null) ? 0 : accountNumber.hashCode());
 		result = prime * result + ((accountType == null) ? 0 : accountType.hashCode());
 		result = prime * result + ((balance == null) ? 0 : balance.hashCode());
-		result = prime * result + ((creditCard == null) ? 0 : creditCard.hashCode());
 		result = prime * result + ((idAccount == null) ? 0 : idAccount.hashCode());
 		return result;
 	}
@@ -117,11 +109,6 @@ public abstract class Account {
 			if (other.balance != null)
 				return false;
 		} else if (!balance.equals(other.balance))
-			return false;
-		if (creditCard == null) {
-			if (other.creditCard != null)
-				return false;
-		} else if (!creditCard.equals(other.creditCard))
 			return false;
 		if (idAccount == null) {
 			if (other.idAccount != null)

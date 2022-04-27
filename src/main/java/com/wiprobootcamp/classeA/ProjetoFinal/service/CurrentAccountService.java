@@ -44,11 +44,11 @@ public class CurrentAccountService {
 	}
 
 	//Método que atualiza uma conta corrente dado um ID e uma conta corrente
-	public CurrentAccount updateCurrentAccount(CurrentAccount currentAccount) throws Exception {
+	public CurrentAccount updateCurrentAccount(CurrentAccount currentAccount) throws BusinessException {
 		Optional<CurrentAccount> findCurrentAccountInDb = currentAccountRepository.findByAccountNumber(currentAccount.getAccountNumber());
 		if(findCurrentAccountInDb.isEmpty()){
 			logger.info("Conta não localizada no Banco de Dados");
-			throw new Exception("Conta não localizada!");
+			throw new BusinessException("Conta não localizada!");
 		}
 		CurrentAccount upCurrentAccount = new CurrentAccount();
 		upCurrentAccount.setIdAccount(currentAccount.getIdAccount());
@@ -60,19 +60,18 @@ public class CurrentAccountService {
 	}
 
 	//Método que cria uma conta corrente
-	public CurrentAccount createCurrentAccount(CurrentAccountRequest currentAccountRequest) throws Exception {
+	public CurrentAccount createCurrentAccount(CurrentAccountRequest currentAccountRequest) throws BusinessException {
 		Optional<CurrentAccount> findCurrentAccountInDb = currentAccountRepository.findByAccountNumber(currentAccountRequest.getAccountNumber());
 			if(findCurrentAccountInDb.isPresent()) {
 				logger.info("Conta já cadastrada no Banco de dados!");
-				throw new Exception("Conta corrente já cadastrada!");
+				throw new BusinessException("Conta corrente já cadastrada!");
 			}
 		Optional<Customer> findCustomerInDb = customerRepository.findByDocumentNumber(currentAccountRequest.getDocumentNumber());
 			if (findCustomerInDb.isEmpty()) {
-				throw new  Exception("Cliente não existe no banco de dados");
+				throw new  BusinessException("Cliente não existe no banco de dados");
 			}
 			CurrentAccount newCurrentAccount = new CurrentAccount();
 			newCurrentAccount.setAccountNumber(currentAccountRequest.getAccountNumber());
-			newCurrentAccount.setCreditCard(currentAccountRequest.getCreditCard());
 			newCurrentAccount.setAccountType(AccountType.CURRENT_ACCOUNT);
 			newCurrentAccount.setBalance(currentAccountRequest.getBalance());
 			newCurrentAccount.setCustomer(findCustomerInDb.get());
@@ -96,11 +95,11 @@ public class CurrentAccountService {
 	}
 
 
-	public String depositMoney(TransactionsRequest transactionsRequest) throws Exception {
+	public String depositMoney(TransactionsRequest transactionsRequest) throws BusinessException {
 		Optional<CurrentAccount> findAccountInDb = currentAccountRepository.findByAccountNumber(transactionsRequest.getAccountNumber());
 		if(findAccountInDb.isEmpty()) {
 			logger.info("Conta não existe no Banco de Dados");
-			throw new Exception("Conta não localizada!");
+			throw new BusinessException("Conta não localizada!");
 		}
 		Double defineBalance = findAccountInDb.get().getBalance() + transactionsRequest.getValue();
 		findAccountInDb.get().setBalance(defineBalance);

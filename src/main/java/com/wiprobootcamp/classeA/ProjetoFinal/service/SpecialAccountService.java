@@ -54,7 +54,6 @@ public class SpecialAccountService {
 		newSpecialAccount.setAccountNumber(specialAccount.getAccountNumber());
 		newSpecialAccount.setAccountType(AccountType.ESPECIAL_ACCOUNT);
 		newSpecialAccount.setBalance(specialAccount.getBalance());
-		newSpecialAccount.setCreditCard(specialAccount.getCreditCard());
 		newSpecialAccount.setLimitAmount(specialAccount.getLimitAmount());
 		newSpecialAccount.setCustomer(findSpecialAccountInDb.get().getCustomer());
 
@@ -79,7 +78,6 @@ public class SpecialAccountService {
 
 			SpecialAccount newSpecialAccount = new SpecialAccount();
 			newSpecialAccount.setAccountNumber(specialAccountRequest.getAccountNumber());
-			newSpecialAccount.setCreditCard(specialAccountRequest.getCreditCard());
 			newSpecialAccount.setAccountType(AccountType.ESPECIAL_ACCOUNT);
 			newSpecialAccount.setLimitAmount(specialAccountRequest.getLimitAmount());
 			newSpecialAccount.setBalance(specialAccountRequest.getBalance());
