@@ -3,6 +3,7 @@ package com.wiprobootcamp.classeA.ProjetoFinal.controller;
 import com.wiprobootcamp.classeA.ProjetoFinal.model.Receipt;
 import com.wiprobootcamp.classeA.ProjetoFinal.service.ReceiptService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,13 +17,14 @@ public class ReceiptController {
     @Autowired
     private ReceiptService receiptService;
 
-    @GetMapping("/allReceipts")
-    public List<Receipt> getAllReceipts() {
-        return this.receiptService.allReceipts();
+    @GetMapping("/getAllReceipts")
+    public ResponseEntity<List<Receipt>> getAllReceipts() {
+        return ResponseEntity.ok().body(receiptService.allReceipts());
     }
 
-    @GetMapping("/allReceiptsByAccount")
-    public Iterable<Receipt> getAllByAccountNumber(String accountNumber) {
-        return this.receiptService.receiptsOfAccount(accountNumber);
+
+    @GetMapping("/getAllReceiptsByAccount")
+    public ResponseEntity<Iterable<Receipt>> getAllByAccountNumber(String accountNumber) {
+        return ResponseEntity.ok().body(receiptService.receiptsOfAccount(accountNumber));
     }
 }

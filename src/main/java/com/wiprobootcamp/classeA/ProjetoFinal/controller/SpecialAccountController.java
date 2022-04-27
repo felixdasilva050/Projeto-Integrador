@@ -16,36 +16,34 @@ public class SpecialAccountController {
     @Autowired
     private SpecialAccountService specialAccountService;
 
-    @GetMapping("/{idAccount}")
+    @GetMapping("/findById/{idAccount}")
     public ResponseEntity<SpecialAccount> getSpecialAccountById(@PathVariable Integer idAccount) {
-        SpecialAccount specialAccount = this.specialAccountService.findById(idAccount);
-        return ResponseEntity.ok().body(specialAccount);
+        return ResponseEntity.ok().body(specialAccountService.findById(idAccount));
     }
 
     @GetMapping("/getAll")
-    public Iterable<SpecialAccount> getAllSpecialAccounts() {
-        return this.specialAccountService.findAll();
+    public ResponseEntity<Iterable<SpecialAccount>> getAllSpecialAccounts() {
+        return ResponseEntity.ok().body(specialAccountService.findAll());
     }
 
     @PostMapping("/create")
     @ResponseBody
-    public SpecialAccount createSpecialAccount(@RequestBody SpecialAccountRequest specialAccountRequest) throws Exception {
-        return  specialAccountService.create(specialAccountRequest);
+    public ResponseEntity<SpecialAccount> createSpecialAccount(@RequestBody SpecialAccountRequest specialAccountRequest) throws Exception {
+        return  ResponseEntity.status(HttpStatus.CREATED).body(specialAccountService.create(specialAccountRequest));
     }
 
     @PutMapping("/update")
     public ResponseEntity<SpecialAccount> updateIndividual(@RequestBody SpecialAccount specialAccount) throws Exception {
-        specialAccountService.updateSpecialAccount(specialAccount);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(specialAccount);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(specialAccountService.updateSpecialAccount(specialAccount));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteSpecialAccount(@PathVariable Integer id) {
+    @DeleteMapping("/delete/{idSpecialAccount}")
+    public ResponseEntity<String> deleteSpecialAccount(@PathVariable Integer idSpecialAccount) {
         try {
-            specialAccountService.delete(id);
-         return  ResponseEntity.status(HttpStatus.ACCEPTED).body("Conta especial deletada com sucesso!");
+            specialAccountService.delete(idSpecialAccount);
+            return  ResponseEntity.status(HttpStatus.ACCEPTED).body("Conta especial deletada com sucesso!");
         } catch (Exception ex) {
-         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         }
     }
 
