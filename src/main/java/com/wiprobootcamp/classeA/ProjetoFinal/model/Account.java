@@ -26,6 +26,9 @@ public abstract class Account {
 	@OneToOne
 	@JoinColumn(name = "id_creditcard")
 	protected CreditCard creditCard;
+
+	@OneToOne
+	private Customer customer;
 	
 	protected AccountType accountType;
 	
@@ -36,7 +39,7 @@ public abstract class Account {
 
 	//Construtor com os atributos
 	public Account(Integer idAccount, String accountNumber, Double balance, CreditCard creditCard,
-			AccountType accountType) {
+				   AccountType accountType) {
 		super();
 		this.idAccount = idAccount;
 		this.accountNumber = accountNumber;
@@ -46,6 +49,16 @@ public abstract class Account {
 	}
 
 	//Getters e setters
+
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
 	public Integer getIdAccount() {
 		return idAccount;
 	}

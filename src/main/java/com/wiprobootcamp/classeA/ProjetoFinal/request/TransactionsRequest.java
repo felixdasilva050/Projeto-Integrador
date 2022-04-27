@@ -1,19 +1,17 @@
-package com.wiprobootcamp.classeA.ProjetoFinal.model;
-
-import java.util.Date;
+package com.wiprobootcamp.classeA.ProjetoFinal.request;
 
 public class TransactionsRequest {
     private String accountNumber;
     private String transactionDate;
-    private Double debitValue;
+    private Double value;
 
     public TransactionsRequest() {
     }
 
-    public TransactionsRequest(String accountNumber, String transactionDate, Double debitValue) {
+    public TransactionsRequest(String accountNumber, String transactionDate, Double value) {
         this.accountNumber = accountNumber;
         this.transactionDate = transactionDate;
-        this.debitValue = debitValue;
+        this.value = value;
     }
 
     public String getAccountNumber() {
@@ -32,12 +30,12 @@ public class TransactionsRequest {
         this.transactionDate = transactionDate;
     }
 
-    public Double getDebitValue() {
-        return debitValue;
+    public Double getValue() {
+        return value;
     }
 
-    public void setDebitValue(Double debitValue) {
-        this.debitValue = debitValue;
+    public void setValue(Double value) {
+        this.value = value;
     }
 
     @Override
@@ -45,7 +43,7 @@ public class TransactionsRequest {
         return "TransactionsRequest{" +
                 "accountNumber='" + accountNumber + '\'' +
                 ", transactionDate=" + transactionDate +
-                ", debitValue=" + debitValue +
+                ", value=" + value +
                 '}';
     }
 }

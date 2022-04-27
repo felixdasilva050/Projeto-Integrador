@@ -1,17 +1,20 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.service;
 
+import com.wiprobootcamp.classeA.ProjetoFinal.enums.AccountType;
+import com.wiprobootcamp.classeA.ProjetoFinal.model.Customer;
+import com.wiprobootcamp.classeA.ProjetoFinal.model.SpecialAccount;
+import com.wiprobootcamp.classeA.ProjetoFinal.request.SpecialAccountRequest;
+import com.wiprobootcamp.classeA.ProjetoFinal.repository.CustomerRepository;
+import com.wiprobootcamp.classeA.ProjetoFinal.repository.SpecialAccountRepository;
+import com.wiprobootcamp.classeA.ProjetoFinal.request.TransactionsRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-
-import com.wiprobootcamp.classeA.ProjetoFinal.enums.AccountType;
-import com.wiprobootcamp.classeA.ProjetoFinal.model.TransactionsRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.wiprobootcamp.classeA.ProjetoFinal.model.SpecialAccount;
-import com.wiprobootcamp.classeA.ProjetoFinal.repository.SpecialAccountRepository;
 
 @Service
 public class SpecialAccountService {
@@ -20,6 +23,12 @@ public class SpecialAccountService {
 
 	@Autowired
 	private SpecialAccountRepository specialAccountRepository;
+
+	@Autowired
+	private CustomerRepository customerRepository;
+
+	@Autowired
+	private  ReceiptService receiptService;
 	
 	//método que busca uma conta corrente pelo seu ID
 	public SpecialAccount findById(Integer id) {
@@ -32,74 +41,81 @@ public class SpecialAccountService {
 		return specialAccountRepository.findAll();
 	}
 	
-	//Método que atualiza uma conta corrente dado um ID e uma conta corrente
-	public SpecialAccount update(SpecialAccount specialAccount) throws Exception {
+//	Método que atualiza uma conta corrente dado um ID e uma conta corrente
+	public SpecialAccount updateSpecialAccount(SpecialAccount specialAccount) throws Exception {
 
 		Optional<SpecialAccount> findSpecialAccountInDb = specialAccountRepository.findByAccountNumber(specialAccount.getAccountNumber());
 		if(findSpecialAccountInDb.isEmpty()){
 			logger.info("Conta não localizada no Banco de Dados");
 			throw new Exception("Conta não localizada!");
 		}
-		SpecialAccount newSpecialAccount = findById(specialAccount.getIdAccount());
+		SpecialAccount newSpecialAccount = new SpecialAccount();
+		newSpecialAccount.setIdAccount(findSpecialAccountInDb.get().getIdAccount());
 		newSpecialAccount.setAccountNumber(specialAccount.getAccountNumber());
-		newSpecialAccount.setAccountType(specialAccount.getAccountType());
+		newSpecialAccount.setAccountType(AccountType.ESPECIAL_ACCOUNT);
 		newSpecialAccount.setBalance(specialAccount.getBalance());
 		newSpecialAccount.setCreditCard(specialAccount.getCreditCard());
 		newSpecialAccount.setLimitAmount(specialAccount.getLimitAmount());
-		
+		newSpecialAccount.setCustomer(findSpecialAccountInDb.get().getCustomer());
+
 		return specialAccountRepository.save(newSpecialAccount);
 	}
 	
 	//Método que cria uma conta corrente
-	public SpecialAccount create(SpecialAccount specialAccount) throws Exception {
-		Optional<SpecialAccount> findSpecialAccountInDb = specialAccountRepository.findByAccountNumber(specialAccount.getAccountNumber());
+	public SpecialAccount create(SpecialAccountRequest specialAccountRequest) throws Exception {
+		Optional<SpecialAccount> findSpecialAccountInDb = specialAccountRepository.
+				findByAccountNumber(specialAccountRequest.getAccountNumber());
 
 			if(findSpecialAccountInDb.isPresent()) {
 				logger.info("Conta já cadastrada no Banco de dados!");
 				throw new Exception("Conta especial já cadastrada!");
 			}
 
+		Optional<Customer> findCustomer = customerRepository.findByDocumentNumber(specialAccountRequest.getDocumentNumber());
+		if(findCustomer.isEmpty()) {
+			logger.info("Cliente não localizado no banco de dados!");
+			throw new Exception("Cliente não localizado!");
+		}
+
 			SpecialAccount newSpecialAccount = new SpecialAccount();
-			newSpecialAccount.setAccountNumber(specialAccount.getAccountNumber());
-			newSpecialAccount.setCreditCard(specialAccount.getCreditCard());
+			newSpecialAccount.setAccountNumber(specialAccountRequest.getAccountNumber());
+			newSpecialAccount.setCreditCard(specialAccountRequest.getCreditCard());
 			newSpecialAccount.setAccountType(AccountType.ESPECIAL_ACCOUNT);
-			newSpecialAccount.setLimitAmount(specialAccount.getLimitAmount());
-			newSpecialAccount.setBalance(specialAccount.getBalance());
+			newSpecialAccount.setLimitAmount(specialAccountRequest.getLimitAmount());
+			newSpecialAccount.setBalance(specialAccountRequest.getBalance());
+			newSpecialAccount.setCustomer(findCustomer.get());
 			return specialAccountRepository.save(newSpecialAccount);
 	}
-	
-	//Método que deleta uma conta corrente dado um ID
-	public void delete(Integer id) {
-		findById(id);
-		specialAccountRepository.deleteById(id);
+
+	//Método que deleta uma conta corrente informando o número da conta
+	public void delete(Integer id) throws Exception {
+		Optional<SpecialAccount> findSpecialAccount = specialAccountRepository.
+				findById(id);
+		if(findSpecialAccount.isEmpty()) {
+			logger.info("Conta não existe no banco de dados!");
+			throw new Exception("Conta inexistente!");
+		}
+		specialAccountRepository.deleteById(findSpecialAccount.get().getIdAccount());
 	}
 
-	public void specialWithdraw(TransactionsRequest transactionsRequest) throws Exception {
+	public String specialWithdraw(TransactionsRequest transactionsRequest) throws Exception {
 
 		verifyWithdraw(transactionsRequest);
 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		String todayFormated = sdf.format(new Date());
-
-		transactionsRequest.setTransactionDate(todayFormated);
-
+		return receiptService.createReceipt(transactionsRequest);
 	}
 
-	public void depositMoney(TransactionsRequest transactionsRequest) throws Exception {
-		Optional<SpecialAccount> findAccountInDb = specialAccountRepository.findByAccountNumber(transactionsRequest.getAccountNumber());
-		if(findAccountInDb.isEmpty()) {
+	public String depositMoney(TransactionsRequest transactionsRequest) throws Exception {
+		Optional<SpecialAccount> verifyAccountInDb = specialAccountRepository.findByAccountNumber(transactionsRequest.getAccountNumber());
+		if(verifyAccountInDb.isEmpty()) {
 			logger.info("Conta não existe no Banco de Dados");
 			throw new Exception("Conta não localizada!");
 		}
-		Double defineBalance = findAccountInDb.get().getBalance() + transactionsRequest.getDebitValue();
-		findAccountInDb.get().setBalance(defineBalance);
+			Double defineBalance = verifyAccountInDb.get().getBalance() + transactionsRequest.getValue();
+			verifyAccountInDb.get().setBalance(defineBalance);
 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
-		String todayFormated = sdf.format(new Date());
-
-		transactionsRequest.setTransactionDate(todayFormated);
-
-		specialAccountRepository.save(findAccountInDb.get());
+		specialAccountRepository.save(verifyAccountInDb.get());
+		return receiptService.createReceipt(transactionsRequest);
 	}
 
 	private void verifyWithdraw(TransactionsRequest transactionsRequest) throws Exception {
@@ -111,13 +127,13 @@ public class SpecialAccountService {
 			throw new Exception("Conta não localizada!");
 
 			//verifica se possui saldo em conta para sacar, caso possuia apenas realiza o saque
-		} else if (transactionsRequest.getDebitValue() <= findAccountInDb.get().getBalance()) {
-			findAccountInDb.get().setBalance(findAccountInDb.get().getBalance() - transactionsRequest.getDebitValue());
+		} else if (transactionsRequest.getValue() <= findAccountInDb.get().getBalance()) {
+			findAccountInDb.get().setBalance(findAccountInDb.get().getBalance() - transactionsRequest.getValue());
 			specialAccountRepository.save(findAccountInDb.get());
 
 			//verifica se o cliente possui saldo, caso não ele debita o valor restante do saque do limite especial
-		} else if (transactionsRequest.getDebitValue() > findAccountInDb.get().getBalance() && transactionsRequest.getDebitValue() <= findAccountInDb.get().getLimitAmount()) {
-			Double defineLimit = (findAccountInDb.get().getBalance() - transactionsRequest.getDebitValue()) + findAccountInDb.get().getLimitAmount();
+		} else if (transactionsRequest.getValue() > findAccountInDb.get().getBalance() && transactionsRequest.getValue() <= findAccountInDb.get().getLimitAmount()) {
+			Double defineLimit = (findAccountInDb.get().getBalance() - transactionsRequest.getValue()) + findAccountInDb.get().getLimitAmount();
 			findAccountInDb.get().setLimitAmount(defineLimit);
 			findAccountInDb.get().setBalance(0.00);
 			specialAccountRepository.save(findAccountInDb.get());

@@ -1,10 +1,11 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.controller;
 
+import com.wiprobootcamp.classeA.ProjetoFinal.CustomException.BusinessException;
 import com.wiprobootcamp.classeA.ProjetoFinal.model.CurrentAccount;
-import com.wiprobootcamp.classeA.ProjetoFinal.model.TransactionsRequest;
+import com.wiprobootcamp.classeA.ProjetoFinal.request.CurrentAccountRequest;
+import com.wiprobootcamp.classeA.ProjetoFinal.request.TransactionsRequest;
 import com.wiprobootcamp.classeA.ProjetoFinal.service.CurrentAccountService;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.wiprobootcamp.classeA.ProjetoFinal.service.ReceiptService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,58 +14,63 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/currentAccount")
 public class CurrentAccountController {
 
-    @Autowired
-    private CurrentAccountService currentAccountService;
+    private final CurrentAccountService currentAccountService;
 
-    @GetMapping("/{idAccount}")
+    public CurrentAccountController(CurrentAccountService currentAccountService, ReceiptService receiptService) {
+        this.currentAccountService = currentAccountService;
+    }
+
+    @GetMapping("/findById/{idAccount}")
     public ResponseEntity<CurrentAccount> getCurrentAccountById(@PathVariable Integer idAccount) {
-        CurrentAccount currentAccount = this.currentAccountService.findById(idAccount);
+        CurrentAccount currentAccount = this.currentAccountService.findCurrentAccountById(idAccount);
         return ResponseEntity.ok().body(currentAccount);
     }
 
     @GetMapping("/getAll")
     public Iterable<CurrentAccount> getAllCurrentAccounts() {
-        return this.currentAccountService.findAll();
+        return this.currentAccountService.findAllCurrentAccount();
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createCurrentAccount(@RequestBody CurrentAccount currentAccount) {
-        try {
-            currentAccountService.create(currentAccount);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Conta corrente " + currentAccount.getAccountNumber() + " criada com sucesso!");
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-        }
+    @ResponseBody
+    public CurrentAccount createCurrentAccount(@RequestBody CurrentAccountRequest currentAccountRequest) throws Exception {
+        return  currentAccountService.createCurrentAccount(currentAccountRequest);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> updateCurrentAccount(@RequestBody CurrentAccount currentAccount) {
+    public ResponseEntity<CurrentAccount> updateIndividual(@RequestBody CurrentAccount currentAccount) throws Exception {
+        currentAccountService.updateCurrentAccount(currentAccount);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(currentAccount);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteCurrentAccount(@PathVariable Integer id){
         try {
-            currentAccountService.update(currentAccount);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Conta corrente " + currentAccount.getAccountNumber() + " atualizada com sucesso!");
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+            currentAccountService.delete(id);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Conta deletada com sucesso!");
+        } catch (BusinessException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conta corrente não encontrada no banco de dados!");
         }
     }
 
     @PutMapping("/currentWithdraw")
-    public ResponseEntity<String> currentWithdraw(@RequestBody TransactionsRequest transactionsRequest) throws Exception {
+    public ResponseEntity<String> currentWithdraw(@RequestBody TransactionsRequest transactionsRequest) {
         try {
-            currentAccountService.withdrawCash(transactionsRequest);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saque de " + transactionsRequest.getDebitValue() + " Realizado com sucesso!");
+           return ResponseEntity.status(HttpStatus.ACCEPTED).body(currentAccountService.withdrawCash(transactionsRequest));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         }
-
     }
 
     @PutMapping("/deposit")
     public ResponseEntity<String> depositMoney(@RequestBody TransactionsRequest transactionsRequest) {
         try {
-            currentAccountService.depositMoney(transactionsRequest);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Depósito de " + transactionsRequest.getDebitValue() + " Realizado com sucesso!");
+           return ResponseEntity.status(HttpStatus.ACCEPTED).body(currentAccountService.depositMoney(transactionsRequest));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         }
     }
+
+
+
 }

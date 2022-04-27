@@ -1,7 +1,8 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.controller;
 
 import com.wiprobootcamp.classeA.ProjetoFinal.model.SpecialAccount;
-import com.wiprobootcamp.classeA.ProjetoFinal.model.TransactionsRequest;
+import com.wiprobootcamp.classeA.ProjetoFinal.request.SpecialAccountRequest;
+import com.wiprobootcamp.classeA.ProjetoFinal.request.TransactionsRequest;
 import com.wiprobootcamp.classeA.ProjetoFinal.service.SpecialAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,41 +28,40 @@ public class SpecialAccountController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createSpecialAccount(@RequestBody SpecialAccount specialAccount) {
-        try {
-            specialAccountService.create(specialAccount);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Conta especial " + specialAccount.getAccountNumber() + " criada com sucesso!");
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-        }
+    @ResponseBody
+    public SpecialAccount createSpecialAccount(@RequestBody SpecialAccountRequest specialAccountRequest) throws Exception {
+        return  specialAccountService.create(specialAccountRequest);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> updateSpecialAccount(@RequestBody SpecialAccount specialAccount) {
+    public ResponseEntity<SpecialAccount> updateIndividual(@RequestBody SpecialAccount specialAccount) throws Exception {
+        specialAccountService.updateSpecialAccount(specialAccount);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(specialAccount);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteSpecialAccount(@PathVariable Integer id) {
         try {
-            specialAccountService.update(specialAccount);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Conta especial " + specialAccount.getAccountNumber() + " atualizada com sucesso!");
+            specialAccountService.delete(id);
+         return  ResponseEntity.status(HttpStatus.ACCEPTED).body("Conta especial deletada com sucesso!");
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         }
     }
 
     @PutMapping("/specialWithdraw")
-    public ResponseEntity<String> specialWithdraw(@RequestBody TransactionsRequest transactionsRequest) throws Exception {
+    public ResponseEntity<String> specialWithdraw(@RequestBody TransactionsRequest transactionsRequest) {
         try {
-            specialAccountService.specialWithdraw(transactionsRequest);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Saque de " + transactionsRequest.getDebitValue() + " Realizado com sucesso!");
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(specialAccountService.specialWithdraw(transactionsRequest));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         }
-
     }
 
     @PutMapping("/deposit")
     public ResponseEntity<String> depositMoney(@RequestBody TransactionsRequest transactionsRequest) {
         try {
-            specialAccountService.depositMoney(transactionsRequest);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Depósito de " + transactionsRequest.getDebitValue() + " Realizado com sucesso!");
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(specialAccountService.depositMoney(transactionsRequest));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         }

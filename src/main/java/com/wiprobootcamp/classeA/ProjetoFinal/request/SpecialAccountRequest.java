@@ -1,32 +1,44 @@
-package com.wiprobootcamp.classeA.ProjetoFinal.model;
-
-import javax.persistence.*;
+package com.wiprobootcamp.classeA.ProjetoFinal.request;
 
 import com.wiprobootcamp.classeA.ProjetoFinal.enums.AccountType;
+import com.wiprobootcamp.classeA.ProjetoFinal.model.Account;
+import com.wiprobootcamp.classeA.ProjetoFinal.model.CreditCard;
+
+import javax.persistence.Entity;
 
 //Representa uma entidade em nossa base de dados
 @Entity
-public class SpecialAccount extends Account {
+public class SpecialAccountRequest extends Account {
 
 
 	private Double limitAmount;
+	private String documentNumber;
 
 
 
 	// Construtor da Superclasse
-	public SpecialAccount() {
+	public SpecialAccountRequest() {
 		super();
 	}
 
 	// Construtor com os atributos
-	public SpecialAccount(Double limitAmount) {
-		super();
+
+
+	public SpecialAccountRequest(Double limitAmount, String documentNumber) {
 		this.limitAmount = limitAmount;
+		this.documentNumber = documentNumber;
 	}
 
+	public String getDocumentNumber() {
+		return documentNumber;
+	}
+
+	public void setDocumentNumber(String documentNumber) {
+		this.documentNumber = documentNumber;
+	}
+
+
 	// Métodos getters e setters
-
-
 	public Double getLimitAmount() {
 		return limitAmount;
 	}
@@ -70,7 +82,7 @@ public class SpecialAccount extends Account {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SpecialAccount other = (SpecialAccount) obj;
+		SpecialAccountRequest other = (SpecialAccountRequest) obj;
 		if (limitAmount == null) {
 			if (other.limitAmount != null)
 				return false;
