@@ -22,36 +22,39 @@ public class CurrentAccountController {
 
     @GetMapping("/findById/{idAccount}")
     public ResponseEntity<CurrentAccount> getCurrentAccountById(@PathVariable Integer idAccount) {
-        CurrentAccount currentAccount = this.currentAccountService.findCurrentAccountById(idAccount);
-        return ResponseEntity.ok().body(currentAccount);
+        return ResponseEntity.ok().body(currentAccountService.findCurrentAccountById(idAccount));
     }
 
+
     @GetMapping("/getAll")
-    public Iterable<CurrentAccount> getAllCurrentAccounts() {
-        return this.currentAccountService.findAllCurrentAccount();
+    public ResponseEntity<Iterable<CurrentAccount>> getAllCurrentAccounts() {
+        return ResponseEntity.ok().body(currentAccountService.findAllCurrentAccount());
     }
+
 
     @PostMapping("/create")
     @ResponseBody
-    public CurrentAccount createCurrentAccount(@RequestBody CurrentAccountRequest currentAccountRequest) throws Exception {
-        return  currentAccountService.createCurrentAccount(currentAccountRequest);
+    public ResponseEntity<CurrentAccount> createCurrentAccount(@RequestBody CurrentAccountRequest currentAccountRequest) throws Exception {
+        return ResponseEntity.status(HttpStatus.CREATED).body(currentAccountService.createCurrentAccount(currentAccountRequest));
     }
+
 
     @PutMapping("/update")
     public ResponseEntity<CurrentAccount> updateIndividual(@RequestBody CurrentAccount currentAccount) throws Exception {
-        currentAccountService.updateCurrentAccount(currentAccount);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(currentAccount);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(currentAccountService.updateCurrentAccount(currentAccount));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteCurrentAccount(@PathVariable Integer id){
+
+    @DeleteMapping("/delete/{idDelete}")
+    public ResponseEntity<String> deleteCurrentAccount(@PathVariable Integer idDelete){
         try {
-            currentAccountService.delete(id);
+            currentAccountService.delete(idDelete);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Conta deletada com sucesso!");
         } catch (BusinessException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Conta corrente não encontrada no banco de dados!");
         }
     }
+
 
     @PutMapping("/currentWithdraw")
     public ResponseEntity<String> currentWithdraw(@RequestBody TransactionsRequest transactionsRequest) {
@@ -62,6 +65,7 @@ public class CurrentAccountController {
         }
     }
 
+
     @PutMapping("/deposit")
     public ResponseEntity<String> depositMoney(@RequestBody TransactionsRequest transactionsRequest) {
         try {
@@ -70,7 +74,4 @@ public class CurrentAccountController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         }
     }
-
-
-
 }
