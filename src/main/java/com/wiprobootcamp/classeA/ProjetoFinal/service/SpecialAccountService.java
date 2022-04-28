@@ -82,6 +82,10 @@ public class SpecialAccountService {
 			newSpecialAccount.setLimitAmount(specialAccountRequest.getLimitAmount());
 			newSpecialAccount.setBalance(specialAccountRequest.getBalance());
 			newSpecialAccount.setCustomer(findCustomer.get());
+			newSpecialAccount.setTotalLimitAmount(specialAccountRequest.getLimitAmount());
+			newSpecialAccount.setInDebt(0.0);
+
+
 			return specialAccountRepository.save(newSpecialAccount);
 	}
 
@@ -132,10 +136,37 @@ public class SpecialAccountService {
 			//verifica se o cliente possui saldo, caso não ele debita o valor restante do saque do limite especial
 		} else if (transactionsRequest.getValue() > findAccountInDb.get().getBalance() && transactionsRequest.getValue() <= findAccountInDb.get().getLimitAmount()) {
 			Double defineLimit = (findAccountInDb.get().getBalance() - transactionsRequest.getValue()) + findAccountInDb.get().getLimitAmount();
+			if(findAccountInDb.get().getLimitAmount() <= findAccountInDb.get().getTotalLimitAmount() && findAccountInDb.get().getLimitAmount() != 0){
+				Double debt = transactionsRequest.getValue() + findAccountInDb.get().getInDebt();
+				findAccountInDb.get().setInDebt(debt);
+			} else {
+				logger.info("Limite excedido do total disponível");
+				throw new Exception("Limite excedido");
+			}
 			findAccountInDb.get().setLimitAmount(defineLimit);
 			findAccountInDb.get().setBalance(0.00);
 			specialAccountRepository.save(findAccountInDb.get());
 		}
+	}
+	public String payDebt(TransactionsRequest transactionsRequest) throws Exception {
+		Optional<SpecialAccount> verifyAccountInDb = specialAccountRepository.findByAccountNumber(transactionsRequest.getAccountNumber());
+		if(verifyAccountInDb.isEmpty()) {
+			logger.info("Conta não existe no Banco de Dados");
+			throw new Exception("Conta não localizada!");
+		}
+		if(verifyAccountInDb.get().getInDebt() > 0){
+			Double payDebt = verifyAccountInDb.get().getInDebt() - transactionsRequest.getValue();
+			verifyAccountInDb.get().setInDebt(payDebt < 0 ? 0 : payDebt);
+			if (payDebt<0){
+				Double cash = (verifyAccountInDb.get().getBalance() + (payDebt * (-1.0)));
+				verifyAccountInDb.get().setBalance(cash);
+			}
+			Double paidAmount =  verifyAccountInDb.get().getLimitAmount() + transactionsRequest.getValue();
+			Double totalLimit =  verifyAccountInDb.get().getTotalLimitAmount();
+			verifyAccountInDb.get().setLimitAmount(paidAmount >= totalLimit ? totalLimit : paidAmount);
+		}
+		specialAccountRepository.save(verifyAccountInDb.get());
+		return receiptService.createReceipt(transactionsRequest);
 	}
 
 }
