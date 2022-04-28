@@ -15,39 +15,42 @@ import org.springframework.web.bind.annotation.*;
 public class CreditCardController {
 
     @Autowired
-    private CreditCardService service;
+    private CreditCardService creditCardService;
 
-    @GetMapping("/{idCreditCard}")
+
+    @GetMapping("/findById/{idCreditCard}")
     public ResponseEntity<CreditCard> getCreditCardById(@PathVariable Integer idCreditCard){
-        CreditCard creditCard = this.service.findCreditCardById(idCreditCard);
-        return ResponseEntity.ok().body(creditCard);
+        return ResponseEntity.ok().body(creditCardService.findCreditCardById(idCreditCard));
     }
 
-    @GetMapping
+
+    @GetMapping("/getAll")
     public ResponseEntity<Iterable<CreditCard>> getCreditCard(){
-        Iterable<CreditCard> allCreditCard = this.service.findAllCreditCard();
-        return ResponseEntity.ok().body(allCreditCard);
+        return ResponseEntity.ok().body(creditCardService.findAllCreditCard());
     }
+
 
     @PostMapping("/create")
     public CreditCard createCreditCard(@RequestBody CreditCardRequest creditCardRequest) throws BusinessException {
         return this.service.createCreditCard(creditCardRequest);
     }
 
+
     @PutMapping("/update/{idCreditCard}")
     public ResponseEntity<CreditCard> updateCreditCard(@PathVariable Integer idCreditCard, @RequestBody CreditCard creditCard){
-        CreditCard upCard = this.service.updatePassword(idCreditCard,creditCard);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(upCard);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(creditCardService.updatePassword(idCreditCard,creditCard));
     }
 
+
     @DeleteMapping("/delete/{idCreditCard}")
-    public ResponseEntity<Void> deleteCreditCard(@PathVariable Integer idCreditCard){
-        this.service.deleteCreditCard(idCreditCard);
+    public ResponseEntity<String> deleteCreditCard(@PathVariable Integer idCreditCard){
+        this.creditCardService.deleteCreditCard(idCreditCard);
         return ResponseEntity.noContent().build();
     }
+
+
     @PutMapping("/update/admin/{idCreditCard}")
     public ResponseEntity<CreditCard> updateLimitCreditCard(@PathVariable Integer idCreditCard, @RequestBody CreditCard creditCard){
-        CreditCard upCard = this.service.updateLimit(idCreditCard,creditCard);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(upCard);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(creditCardService.updateLimit(idCreditCard,creditCard));
     }
 }

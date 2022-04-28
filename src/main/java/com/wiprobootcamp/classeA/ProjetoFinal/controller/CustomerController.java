@@ -21,27 +21,32 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+
     @GetMapping("/findById/{idCustomer}")
     public ResponseEntity<Customer> getIndividualById(@PathVariable Integer idCustomer) throws BusinessException {
-        Customer individual = this.customerService.findCustomerById(idCustomer);
-        return ResponseEntity.ok().body(individual);
+        return ResponseEntity.ok().body(customerService.findCustomerById(idCustomer));
     }
 
-    @GetMapping("/findall")
-    public Iterable<Customer> getAllCustomers() {
-            return this.customerService.findAllCustomer();
+
+    @GetMapping("/getAll")
+    public ResponseEntity<Iterable<Customer>> getAllCustomers() {
+            return ResponseEntity.ok().body(customerService.findAllCustomer());
         }
 
+
     @PostMapping("/create")
-    public Customer createCustomer(@RequestBody Customer customer) throws BusinessException {
-    return customerService.createCustomer(customer);
+    @ResponseBody
+    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) throws BusinessException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.createCustomer(customer));
     }
+
 
     @PutMapping("/update")
     public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer) throws Exception {
         customerService.updateCustomer(customer);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(customer);
     }
+
 
     @DeleteMapping("/delete/{idCustomer}")
     public ResponseEntity<String> deleteCurrentAccount(@PathVariable Integer idCustomer){
