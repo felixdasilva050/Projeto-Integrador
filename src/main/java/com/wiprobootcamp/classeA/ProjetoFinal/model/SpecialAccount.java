@@ -8,8 +8,11 @@ import com.wiprobootcamp.classeA.ProjetoFinal.enums.AccountType;
 @Entity
 public class SpecialAccount extends Account {
 
-
+	@Column(name = "currentLimit")
 	private Double limitAmount;
+	private Double inDebt;
+	@Column(name = "availableLimit")
+	private Double totalLimitAmount;
 
 
 
@@ -25,7 +28,6 @@ public class SpecialAccount extends Account {
 	}
 
 	// Métodos getters e setters
-
 
 	public Double getLimitAmount() {
 		return limitAmount;
@@ -43,7 +45,21 @@ public class SpecialAccount extends Account {
 		this.balance = balance;
 	}
 
+	public Double getInDebt() {
+		return inDebt;
+	}
 
+	public void setInDebt(Double inDebt) {
+		this.inDebt = inDebt;
+	}
+
+	public Double getTotalLimitAmount() {
+		return totalLimitAmount;
+	}
+
+	public void setTotalLimitAmount(Double totalLimitAmount) {
+		this.totalLimitAmount = totalLimitAmount;
+	}
 
 	public void setAccountType(AccountType accountType) {
 		this.accountType = accountType;
