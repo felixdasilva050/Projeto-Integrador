@@ -1,5 +1,6 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.controller;
 
+import com.wiprobootcamp.classeA.ProjetoFinal.CustomException.BusinessException;
 import com.wiprobootcamp.classeA.ProjetoFinal.model.SpecialAccount;
 import com.wiprobootcamp.classeA.ProjetoFinal.request.SpecialAccountRequest;
 import com.wiprobootcamp.classeA.ProjetoFinal.request.TransactionsRequest;
@@ -17,8 +18,8 @@ public class SpecialAccountController {
     private SpecialAccountService specialAccountService;
 
     @GetMapping("/findById/{idAccount}")
-    public ResponseEntity<SpecialAccount> getSpecialAccountById(@PathVariable Integer idAccount) {
-        return ResponseEntity.ok().body(specialAccountService.findById(idAccount));
+    public SpecialAccount getSpecialAccountById(@PathVariable Integer idAccount) throws BusinessException {
+        return specialAccountService.findById(idAccount);
     }
 
     @GetMapping("/getAll")

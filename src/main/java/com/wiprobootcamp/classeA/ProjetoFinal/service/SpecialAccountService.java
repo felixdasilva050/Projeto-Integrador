@@ -27,8 +27,8 @@ public class SpecialAccountService {
 
 	
 	//método que busca uma conta corrente pelo seu ID
-	public SpecialAccount findById(Integer id) {
-		Optional<SpecialAccount> object = specialAccountRepository.findById(id);
+	public SpecialAccount findById(Integer idAccount) {
+		Optional<SpecialAccount> object = specialAccountRepository.findById(idAccount);
 		return object.orElse(null);
 	}
 	
