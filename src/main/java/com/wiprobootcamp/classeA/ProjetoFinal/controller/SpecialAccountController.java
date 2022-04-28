@@ -64,4 +64,13 @@ public class SpecialAccountController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         }
     }
+
+    @PutMapping("/payLimit")
+    public ResponseEntity<String> payDebt(@RequestBody TransactionsRequest transactionsRequest) {
+        try {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(specialAccountService.payDebt(transactionsRequest));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        }
+    }
 }
