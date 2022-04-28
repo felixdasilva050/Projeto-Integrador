@@ -32,7 +32,7 @@ public class CreditCardController {
 
     @PostMapping("/create")
     public CreditCard createCreditCard(@RequestBody CreditCardRequest creditCardRequest) throws BusinessException {
-        return this.service.createCreditCard(creditCardRequest);
+        return this.creditCardService.createCreditCard(creditCardRequest);
     }
 
 
