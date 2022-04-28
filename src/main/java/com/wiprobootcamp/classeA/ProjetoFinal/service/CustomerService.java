@@ -39,7 +39,7 @@ public class CustomerService {
         return findCustomerId.get();
     }
 
-    public Customer updateCustomer(Customer customer) throws Exception {
+    public Customer updateCustomer(Customer customer) throws BusinessException {
         //Verifica se já existe um CPF no banco de dados.
         Optional<Customer> findCustomer = customerRepository.findByDocumentNumber(customer.getDocumentNumber());
 

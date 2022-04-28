@@ -47,21 +47,6 @@ public class SpecialAccountController {
         }
     }
 
-    @PutMapping("/specialWithdraw")
-    public ResponseEntity<String> specialWithdraw(@RequestBody TransactionsRequest transactionsRequest) {
-        try {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(specialAccountService.specialWithdraw(transactionsRequest));
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-        }
-    }
 
-    @PutMapping("/deposit")
-    public ResponseEntity<String> depositMoney(@RequestBody TransactionsRequest transactionsRequest) {
-        try {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(specialAccountService.depositMoney(transactionsRequest));
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-        }
-    }
+
 }

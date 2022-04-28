@@ -1,20 +1,17 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.wiprobootcamp.classeA.ProjetoFinal.CustomException.BusinessException;
+import com.wiprobootcamp.classeA.ProjetoFinal.enums.AccountType;
+import com.wiprobootcamp.classeA.ProjetoFinal.model.CurrentAccount;
+import com.wiprobootcamp.classeA.ProjetoFinal.model.Customer;
+import com.wiprobootcamp.classeA.ProjetoFinal.repository.CurrentAccountRepository;
+import com.wiprobootcamp.classeA.ProjetoFinal.repository.CustomerRepository;
+import com.wiprobootcamp.classeA.ProjetoFinal.request.CurrentAccountRequest;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-
-import com.wiprobootcamp.classeA.ProjetoFinal.CustomException.BusinessException;
-import com.wiprobootcamp.classeA.ProjetoFinal.enums.AccountType;
-import com.wiprobootcamp.classeA.ProjetoFinal.request.CurrentAccountRequest;
-import com.wiprobootcamp.classeA.ProjetoFinal.model.Customer;
-import com.wiprobootcamp.classeA.ProjetoFinal.repository.CustomerRepository;
-import com.wiprobootcamp.classeA.ProjetoFinal.request.TransactionsRequest;
-import org.springframework.stereotype.Service;
-import com.wiprobootcamp.classeA.ProjetoFinal.model.CurrentAccount;
-import com.wiprobootcamp.classeA.ProjetoFinal.repository.CurrentAccountRepository;
 
 @Service
 public class CurrentAccountService {
@@ -23,13 +20,12 @@ public class CurrentAccountService {
 
 	private final CurrentAccountRepository currentAccountRepository;
 	private final CustomerRepository customerRepository;
-	private final ReceiptService receiptService;
 
 
-	public CurrentAccountService(CurrentAccountRepository currentAccountRepository, CustomerRepository customerRepository, ReceiptService receiptService) {
+
+	public CurrentAccountService(CurrentAccountRepository currentAccountRepository, CustomerRepository customerRepository) {
 		this.currentAccountRepository = currentAccountRepository;
 		this.customerRepository = customerRepository;
-		this.receiptService = receiptService;
 	}
 
 	//método que busca uma conta corrente pelo seu ID
@@ -86,43 +82,6 @@ public class CurrentAccountService {
 			throw new BusinessException("Conta inexistente!");
 		}
 		currentAccountRepository.deleteById(findCurrentAccount.get().getIdAccount());
-	}
-	public String withdrawCash(TransactionsRequest transactionsRequest) throws Exception {
-
-		verifyWithdraw(transactionsRequest);
-
-		return receiptService.createReceipt(transactionsRequest);
-	}
-
-
-	public String depositMoney(TransactionsRequest transactionsRequest) throws BusinessException {
-		Optional<CurrentAccount> findAccountInDb = currentAccountRepository.findByAccountNumber(transactionsRequest.getAccountNumber());
-		if(findAccountInDb.isEmpty()) {
-			logger.info("Conta não existe no Banco de Dados");
-			throw new BusinessException("Conta não localizada!");
-		}
-		Double defineBalance = findAccountInDb.get().getBalance() + transactionsRequest.getValue();
-		findAccountInDb.get().setBalance(defineBalance);
-
-		currentAccountRepository.save(findAccountInDb.get());
-		return receiptService.createReceipt(transactionsRequest);
-	}
-
-	private void verifyWithdraw(TransactionsRequest transactionsRequest) throws BusinessException {
-		Optional<CurrentAccount> findAccount = currentAccountRepository.findByAccountNumber(transactionsRequest.getAccountNumber());
-		if(findAccount.isEmpty()) {
-			logger.info("Conta não existe no Banco de Dados");
-			throw new BusinessException("Conta não localizada!");
-			//verifica se possui saldo em conta para sacar, caso possuia apenas realiza o saque
-		}else if (transactionsRequest.getValue() <= findAccount.get().getBalance()) {
-
-			findAccount.get().setBalance(findAccount.get().getBalance() - transactionsRequest.getValue());
-			currentAccountRepository.save(findAccount.get());
-
-			//Se não a aplicação apenas devolde a mensagem de saldo insuficiente
-		} else {
-			throw new BusinessException("Conta não possui saldo!");
-		}
 	}
 
 }

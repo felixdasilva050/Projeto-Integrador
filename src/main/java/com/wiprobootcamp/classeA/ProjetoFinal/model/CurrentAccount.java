@@ -8,11 +8,6 @@ import com.wiprobootcamp.classeA.ProjetoFinal.enums.AccountType;
 @Entity
 public class CurrentAccount extends Account {
 
-
-
-	// Métodos Setter
-
-
 	public void setAccountNumber(String accountNumber) {
 		this.accountNumber = accountNumber;
 	}
@@ -20,8 +15,6 @@ public class CurrentAccount extends Account {
 	public void setBalance(Double balance) {
 		this.balance = balance;
 	}
-
-
 
 	public void setAccountType(AccountType accountType) {
 		this.accountType = accountType;
