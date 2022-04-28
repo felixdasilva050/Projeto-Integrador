@@ -2,6 +2,7 @@ package com.wiprobootcamp.classeA.ProjetoFinal.controller;
 
 import com.wiprobootcamp.classeA.ProjetoFinal.CustomException.BusinessException;
 import com.wiprobootcamp.classeA.ProjetoFinal.model.CreditCard;
+import com.wiprobootcamp.classeA.ProjetoFinal.request.CreditCardRequest;
 import com.wiprobootcamp.classeA.ProjetoFinal.service.CreditCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,9 +31,8 @@ public class CreditCardController {
 
 
     @PostMapping("/create")
-    @ResponseBody
-    public ResponseEntity<CreditCard> createCreditCard(@RequestBody CreditCard creditCard){
-        return ResponseEntity.status(HttpStatus.CREATED).body(creditCardService.createCreditCard(creditCard));
+    public CreditCard createCreditCard(@RequestBody CreditCardRequest creditCardRequest) throws BusinessException {
+        return this.creditCardService.createCreditCard(creditCardRequest);
     }
 
 

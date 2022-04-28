@@ -1,7 +1,13 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.service;
 
+import com.wiprobootcamp.classeA.ProjetoFinal.CustomException.BusinessException;
 import com.wiprobootcamp.classeA.ProjetoFinal.model.CreditCard;
+import com.wiprobootcamp.classeA.ProjetoFinal.model.CurrentAccount;
+import com.wiprobootcamp.classeA.ProjetoFinal.model.SpecialAccount;
 import com.wiprobootcamp.classeA.ProjetoFinal.repository.CreditCardRepository;
+import com.wiprobootcamp.classeA.ProjetoFinal.repository.CurrentAccountRepository;
+import com.wiprobootcamp.classeA.ProjetoFinal.repository.SpecialAccountRepository;
+import com.wiprobootcamp.classeA.ProjetoFinal.request.CreditCardRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +22,32 @@ public class CreditCardService {
     @Autowired
     private CreditCardRepository creditCardRepository;
 
-    public CreditCard createCreditCard(CreditCard creditCard){
-        creditCard.setCardNumber(cardRandom());
-        return creditCardRepository.save(creditCard);
+    @Autowired
+    private CurrentAccountRepository currentAccountRepository;
+
+    @Autowired
+    SpecialAccountRepository specialAccountRepository;
+
+    public CreditCard createCreditCard(CreditCardRequest creditCardRequest) throws BusinessException {
+        Optional<CurrentAccount> findCurrentAccountInDb = currentAccountRepository.findByAccountNumber(creditCardRequest.getAccountNumber());
+        Optional<SpecialAccount> findSpecialAccountInDb = specialAccountRepository.findByAccountNumber(creditCardRequest.getAccountNumber());
+        if(findCurrentAccountInDb.isPresent()){
+            CreditCard newCreditCard = new CreditCard();
+            newCreditCard.setCardNumber(cardRandom());
+            newCreditCard.setAccount(findCurrentAccountInDb.get());
+            newCreditCard.setCardLimit(creditCardRequest.getCardLimit());
+            newCreditCard.setPassword(creditCardRequest.getPassword());
+            return creditCardRepository.save(newCreditCard);
+
+        }else if(findSpecialAccountInDb.isPresent()) {
+            CreditCard newCreditCard = new CreditCard();
+            newCreditCard.setCardNumber(cardRandom());
+            newCreditCard.setAccount(findSpecialAccountInDb.get());
+            newCreditCard.setCardLimit(creditCardRequest.getCardLimit());
+            newCreditCard.setPassword(creditCardRequest.getPassword());
+            return creditCardRepository.save(newCreditCard);
+        } else
+            throw new BusinessException("Conta não localizada!");
     }
 
     public CreditCard findCreditCardById(Integer idCreditCard){

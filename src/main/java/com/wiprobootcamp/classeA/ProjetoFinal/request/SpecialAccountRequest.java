@@ -55,9 +55,6 @@ public class SpecialAccountRequest extends Account {
 		this.balance = balance;
 	}
 
-	public void setCreditCard(CreditCard creditCard) {
-		this.creditCard = creditCard;
-	}
 
 	public void setAccountType(AccountType accountType) {
 		this.accountType = accountType;
