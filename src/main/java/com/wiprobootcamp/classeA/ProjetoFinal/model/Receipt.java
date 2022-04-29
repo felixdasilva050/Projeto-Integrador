@@ -9,7 +9,7 @@ public class Receipt {
     private String idReceipt;
     private String accountNumber;
     private Double value;
-    private String TransactionDate;
+    private String transactionDate;
 
     public Receipt() {
     }
@@ -18,15 +18,15 @@ public class Receipt {
         this.idReceipt = idReceipt;
         this.accountNumber = accountNumber;
         this.value = Value;
-        TransactionDate = transactionDate;
+        this.transactionDate = transactionDate;
     }
 
     public String getTransactionDate() {
-        return TransactionDate;
+        return transactionDate;
     }
 
     public void setTransactionDate(String transactionDate) {
-        TransactionDate = transactionDate;
+        this.transactionDate = transactionDate;
     }
 
     public String getIdReceipt() {
@@ -44,8 +44,6 @@ public class Receipt {
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
-
-
 
     public Double getValue() {
         return value;

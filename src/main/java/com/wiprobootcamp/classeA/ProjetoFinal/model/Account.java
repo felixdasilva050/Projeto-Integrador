@@ -22,19 +22,15 @@ public abstract class Account {
 	protected Integer idAccount;
 	protected String accountNumber;
 	protected Double balance;
-	
 
 	@OneToOne
 	private Customer customer;
-	
 	protected AccountType accountType;
-	
-	//Construtor padrão
+
 	public Account() {
 
 	}
 
-	//Construtor com os atributos
 	public Account(Integer idAccount, String accountNumber, Double balance, CreditCard creditCard,
 				   AccountType accountType) {
 		super();
@@ -43,9 +39,6 @@ public abstract class Account {
 		this.balance = balance;
 		this.accountType = accountType;
 	}
-
-	//Getters e setters
-
 
 	public Customer getCustomer() {
 		return customer;
@@ -76,7 +69,6 @@ public abstract class Account {
 		return accountType;
 	}
 
-	//Equals e Hashcode
 	
 	@Override
 	public int hashCode() {

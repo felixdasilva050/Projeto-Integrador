@@ -14,7 +14,6 @@ public class Customer {
     private String address;
     private CustomerType customerType;
 
-
     public Customer() {
     }
 

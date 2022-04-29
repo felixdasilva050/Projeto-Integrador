@@ -55,23 +55,4 @@ public class CurrentAccountController {
         }
     }
 
-
-    @PutMapping("/currentWithdraw")
-    public ResponseEntity<String> currentWithdraw(@RequestBody TransactionsRequest transactionsRequest) {
-        try {
-           return ResponseEntity.status(HttpStatus.ACCEPTED).body(currentAccountService.withdrawCash(transactionsRequest));
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-        }
-    }
-
-
-    @PutMapping("/deposit")
-    public ResponseEntity<String> depositMoney(@RequestBody TransactionsRequest transactionsRequest) {
-        try {
-           return ResponseEntity.status(HttpStatus.ACCEPTED).body(currentAccountService.depositMoney(transactionsRequest));
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-        }
-    }
 }

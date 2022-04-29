@@ -1,5 +1,6 @@
 package com.wiprobootcamp.classeA.ProjetoFinal.controller;
 
+import com.wiprobootcamp.classeA.ProjetoFinal.CustomException.BusinessException;
 import com.wiprobootcamp.classeA.ProjetoFinal.model.SpecialAccount;
 import com.wiprobootcamp.classeA.ProjetoFinal.request.SpecialAccountRequest;
 import com.wiprobootcamp.classeA.ProjetoFinal.request.TransactionsRequest;
@@ -17,8 +18,8 @@ public class SpecialAccountController {
     private SpecialAccountService specialAccountService;
 
     @GetMapping("/findById/{idAccount}")
-    public ResponseEntity<SpecialAccount> getSpecialAccountById(@PathVariable Integer idAccount) {
-        return ResponseEntity.ok().body(specialAccountService.findById(idAccount));
+    public SpecialAccount getSpecialAccountById(@PathVariable Integer idAccount) throws BusinessException {
+        return specialAccountService.findById(idAccount);
     }
 
     @GetMapping("/getAll")
@@ -47,21 +48,6 @@ public class SpecialAccountController {
         }
     }
 
-    @PutMapping("/specialWithdraw")
-    public ResponseEntity<String> specialWithdraw(@RequestBody TransactionsRequest transactionsRequest) {
-        try {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(specialAccountService.specialWithdraw(transactionsRequest));
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-        }
-    }
 
-    @PutMapping("/deposit")
-    public ResponseEntity<String> depositMoney(@RequestBody TransactionsRequest transactionsRequest) {
-        try {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(specialAccountService.depositMoney(transactionsRequest));
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-        }
-    }
+
 }
