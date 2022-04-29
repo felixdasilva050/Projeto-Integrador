@@ -38,19 +38,19 @@ public class SpecialAccountService {
 	}
 	
 //	Método que atualiza uma conta corrente dado um ID e uma conta corrente
-	public SpecialAccount updateSpecialAccount(SpecialAccount specialAccount) throws BusinessException {
+	public SpecialAccount updateSpecialAccount(SpecialAccountRequest specialAccountRequest) throws BusinessException {
 
-		Optional<SpecialAccount> findSpecialAccountInDb = specialAccountRepository.findByAccountNumber(specialAccount.getAccountNumber());
+		Optional<SpecialAccount> findSpecialAccountInDb = specialAccountRepository.findByAccountNumber(specialAccountRequest.getAccountNumber());
 		if(findSpecialAccountInDb.isEmpty()){
 			logger.info("Conta não localizada no Banco de Dados");
 			throw new BusinessException("Conta não localizada!");
 		}
 		SpecialAccount newSpecialAccount = new SpecialAccount();
 		newSpecialAccount.setIdAccount(findSpecialAccountInDb.get().getIdAccount());
-		newSpecialAccount.setAccountNumber(specialAccount.getAccountNumber());
+		newSpecialAccount.setAccountNumber(specialAccountRequest.getAccountNumber());
 		newSpecialAccount.setAccountType(AccountType.ESPECIAL_ACCOUNT);
-		newSpecialAccount.setBalance(specialAccount.getBalance());
-		newSpecialAccount.setLimitAmount(specialAccount.getLimitAmount());
+		newSpecialAccount.setBalance(specialAccountRequest.getBalance());
+		newSpecialAccount.setLimitAmount(specialAccountRequest.getLimitAmount());
 		newSpecialAccount.setCustomer(findSpecialAccountInDb.get().getCustomer());
 
 		return specialAccountRepository.save(newSpecialAccount);
@@ -58,8 +58,7 @@ public class SpecialAccountService {
 	
 	//Método que cria uma conta corrente
 	public SpecialAccount create(SpecialAccountRequest specialAccountRequest) throws BusinessException {
-		Optional<SpecialAccount> findSpecialAccountInDb = specialAccountRepository.
-				findByAccountNumber(specialAccountRequest.getAccountNumber());
+		Optional<SpecialAccount> findSpecialAccountInDb = specialAccountRepository.findByAccountNumber(specialAccountRequest.getAccountNumber());
 
 			if(findSpecialAccountInDb.isPresent()) {
 				logger.info("Conta já cadastrada no Banco de dados!");

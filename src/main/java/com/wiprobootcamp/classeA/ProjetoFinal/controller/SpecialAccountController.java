@@ -34,8 +34,8 @@ public class SpecialAccountController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<SpecialAccount> updateIndividual(@RequestBody SpecialAccount specialAccount) throws Exception {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(specialAccountService.updateSpecialAccount(specialAccount));
+    public SpecialAccount updateSpecialAccount(@RequestBody SpecialAccountRequest specialAccountRequest) throws Exception {
+        return specialAccountService.updateSpecialAccount(specialAccountRequest);
     }
 
     @DeleteMapping("/delete/{idSpecialAccount}")

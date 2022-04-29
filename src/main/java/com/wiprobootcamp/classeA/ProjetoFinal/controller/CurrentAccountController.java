@@ -3,7 +3,6 @@ package com.wiprobootcamp.classeA.ProjetoFinal.controller;
 import com.wiprobootcamp.classeA.ProjetoFinal.CustomException.BusinessException;
 import com.wiprobootcamp.classeA.ProjetoFinal.model.CurrentAccount;
 import com.wiprobootcamp.classeA.ProjetoFinal.request.CurrentAccountRequest;
-import com.wiprobootcamp.classeA.ProjetoFinal.request.TransactionsRequest;
 import com.wiprobootcamp.classeA.ProjetoFinal.service.CurrentAccountService;
 import com.wiprobootcamp.classeA.ProjetoFinal.service.ReceiptService;
 import org.springframework.http.HttpStatus;
@@ -40,8 +39,8 @@ public class CurrentAccountController {
 
 
     @PutMapping("/update")
-    public ResponseEntity<CurrentAccount> updateIndividual(@RequestBody CurrentAccount currentAccount) throws Exception {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(currentAccountService.updateCurrentAccount(currentAccount));
+    public CurrentAccount updateCurrentAccount(@RequestBody CurrentAccountRequest currentAccountRequest) throws Exception {
+        return currentAccountService.updateCurrentAccount(currentAccountRequest);
     }
 
 

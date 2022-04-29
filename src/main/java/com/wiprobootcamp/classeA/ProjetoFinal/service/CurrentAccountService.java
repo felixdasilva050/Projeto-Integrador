@@ -40,17 +40,17 @@ public class CurrentAccountService {
 	}
 
 	//Método que atualiza uma conta corrente dado um ID e uma conta corrente
-	public CurrentAccount updateCurrentAccount(CurrentAccount currentAccount) throws BusinessException {
-		Optional<CurrentAccount> findCurrentAccountInDb = currentAccountRepository.findByAccountNumber(currentAccount.getAccountNumber());
+	public CurrentAccount updateCurrentAccount(CurrentAccountRequest currentAccountRequest) throws BusinessException {
+		Optional<CurrentAccount> findCurrentAccountInDb = currentAccountRepository.findByAccountNumber(currentAccountRequest.getAccountNumber());
 		if(findCurrentAccountInDb.isEmpty()){
 			logger.info("Conta não localizada no Banco de Dados");
 			throw new BusinessException("Conta não localizada!");
 		}
 		CurrentAccount upCurrentAccount = new CurrentAccount();
-		upCurrentAccount.setIdAccount(currentAccount.getIdAccount());
-		upCurrentAccount.setAccountNumber(currentAccount.getAccountNumber());
+		upCurrentAccount.setIdAccount(currentAccountRequest.getIdAccount());
+		upCurrentAccount.setAccountNumber(currentAccountRequest.getAccountNumber());
 		upCurrentAccount.setAccountType(AccountType.CURRENT_ACCOUNT);
-		upCurrentAccount.setBalance(currentAccount.getBalance());
+		upCurrentAccount.setBalance(currentAccountRequest.getBalance());
 		upCurrentAccount.setCustomer(findCurrentAccountInDb.get().getCustomer());
 		return currentAccountRepository.save(upCurrentAccount);
 	}
